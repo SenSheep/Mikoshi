@@ -1,0 +1,73 @@
+.main {
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: 20% 25% 10% 45%;
+}
+
+table {
+    width: 95%;
+    table-layout: fixed;
+}
+
+.t {
+    border: 2px solid black;
+    border-collapse: collapse;
+    margin: auto;
+}
+
+th, td {
+    border: 2px solid black;
+    text-align: center;
+}
+
+th {
+    background-color: black;
+    color: white
+}
+
+/* Стили для верхнего меню */
+.menu {
+    background-color: rgb(203, 9, 9); /* Красный фон */
+    padding: 10px 0;
+    position: fixed; /* Фиксированное меню */
+    top: 0;
+    width: 100%;
+}
+.menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+.menu li {
+    margin: 0 15px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px 15px;
+    transition: background 0.3s;
+}
+
+.menu a:hover {
+    background: #530e07; /* Красный при наведении */
+    border-radius: 5px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: red;
+}
