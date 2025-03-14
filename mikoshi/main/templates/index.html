@@ -1,0 +1,56 @@
+<!-- templates/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #b10808;
+            margin-top: 50px;
+        }
+        p, a {
+            font-size: 18px;
+        }
+        a {
+            text-decoration: none;
+            color: #ab0707;
+            margin: 0 10px;
+        }
+        a:hover {
+            color: #660303;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Home Page</h1>
+
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}!</p>
+        <div class="button-container">
+            <a href="{% url 'list_char' %}">Continue</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    {% else %}
+        <p>You are not logged in.</p>
+        <div class="button-container">
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Sign Up</a>
+        </div>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'home/css/style.css' %}">
+    <style>
+        body {
+        padding-left: 40px; /* Добавляет отступ слева */
+    }
+    </style>
+</head>
+<body>
+    <h2>Register</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>
