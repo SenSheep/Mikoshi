@@ -42,7 +42,7 @@
     {% if user.is_authenticated %}
         <p>Hello, {{ user.username }}!</p>
         <div class="button-container">
-            <a href="{% url 'list_char' %}">Continue</a>
+            <a href="{% url 'profile' %}">Continue</a>
             <a href="{% url 'logout' %}">Logout</a>
         </div>
     {% else %}

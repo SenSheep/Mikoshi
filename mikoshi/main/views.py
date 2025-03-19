@@ -24,6 +24,32 @@ def logout_view(request):
 from django.contrib.auth.decorators import login_required
 
 @login_required
-def list_char(request):
-        return render(request, 'list_char.html', {
-    })
+def char_sheet(request, character_id):
+    character = get_object_or_404(Character, id=character_id, user=request.user)  
+    return render(request, 'char_sheet.html', {'character': character})
+
+
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Character
+
+@login_required
+def profile(request):
+    characters = Character.objects.filter(user=request.user)  # Достаем персонажей пользователя
+    return render(request, 'profile.html', {'characters': characters})
+
+from django.shortcuts import render, redirect
+from .forms import CharacterForm
+
+@login_required
+def create_char(request):
+    if request.method == 'POST':
+        form = CharacterForm(request.POST)
+        if form.is_valid():
+            character = form.save(commit=False)
+            character.user = request.user  # Привязываем персонажа к пользователю
+            character.save()
+            return redirect('profile')  # Перенаправляем на список персонажей
+    else:
+        form = CharacterForm()
+    return render(request, 'create_char.html', {'form': form})

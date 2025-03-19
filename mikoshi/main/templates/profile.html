@@ -1,0 +1,9 @@
+<h2>Выберите персонажа</h2>
+<ul>
+    {% for character in characters %}
+        <li><a href="{% url 'char_sheet' character.id %}">{{ character.name }} ({{ character.role }})</a></li>
+    {% empty %}
+        <p>У вас пока нет персонажей.</p>
+    {% endfor %}
+    <a href="{% url 'create_char' %}">Создать нового</a>
+</ul>

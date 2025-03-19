@@ -125,4 +125,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 LOGIN_URL = 'login'
 
-LOGIN_REDIRECT_URL = '/list_char/'
+LOGIN_REDIRECT_URL = '/profile/'
