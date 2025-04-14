@@ -22,6 +22,8 @@ def logout_view(request):
     return redirect('index')
 
 from django.contrib.auth.decorators import login_required
+from .models import Character
+from .forms import CharacterForm
 
 @login_required
 def char_sheet(request, character_id):
@@ -53,3 +55,35 @@ def create_char(request):
     else:
         form = CharacterForm()
     return render(request, 'create_char.html', {'form': form})
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+from .models import Character
+
+@csrf_exempt  # Только если не используешь CSRF токен
+def save_char(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        char_id = data.get('char_id')
+        skills = data.get('skills')
+        stats = data.get('stats')
+
+        try:
+            char = Character.objects.get(id=char_id)
+            char.skills = skills
+            char.stats = stats
+            char.save()
+            return JsonResponse({'status': 'ok'})
+        except Character.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Char not found'})
+
+from django.http import JsonResponse
+from .models import Character
+
+def get_char_skills(request, char_id):
+    try:
+        char = Character.objects.get(id=char_id)
+        return JsonResponse({"status": "ok", "skills": char.skills})
+    except Character.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Character not found"})

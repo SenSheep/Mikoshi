@@ -3,9 +3,15 @@ from django.contrib.auth.models import User
 
 class Character(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Привязка к пользователю
-    name = models.CharField(max_length=100)
-    role = models.CharField(max_length=50, choices=[('netrunner', 'Netrunner'), ('solo', 'Solo'), ('tech', 'Tech')])  
-    created_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=50)
+    role = models.CharField(max_length=50)  
 
-    def __str__(self):
-        return self.name
+    hp = models.IntegerField(default=0)
+
+    # stats
+    stats = models.JSONField(default=dict)
+
+    # Храним все навыки в JSON
+    skills = models.JSONField(default=dict)
+
+    created_at = models.DateTimeField(auto_now_add=True)

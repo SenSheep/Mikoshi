@@ -7,7 +7,6 @@ class RegistrationForm(UserCreationForm):
         model = User
         fields = ['username', 'password1', 'password2']
 
-from django import forms
 from .models import Character
 
 class CharacterForm(forms.ModelForm):

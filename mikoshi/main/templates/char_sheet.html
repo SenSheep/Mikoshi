@@ -4,7 +4,7 @@
     <head>
         <link rel="stylesheet" href="{% static 'css/lc.css' %}">
     </head>
-    <body>
+    <body data-char-id="{{ character.id }}">
         <nav class="menu">
             <ul>
                 <li><a href="#">Главная</a></li>
@@ -14,31 +14,69 @@
         </nav>
 
         <div class="main">
-            <div>
-            <div style="width: 200px; height: 200px; background-color: red; justify-self: center;"></div>
-            <table class="t">
-                <tr><th>Name</th></tr>
-                <tr><td>a</td></tr>
-                <tr><th>Name</th></tr>
-                <tr><td>a</td></tr>
-            </table>
+            <div class="first_col">
+                {{ character.id }}
+                <table class='name_role'>
+                    <tr>
+                        <td>Name</td>
+                        <td>{{ character.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Role</td>
+                        <td>{{ character.role }}</td>
+                    </tr>
+                </table>
             </div>
-
-            <div>
+    
+            <div class="second_col">
+                <table id="stat_table">
+                    <tr>
+                        <th>INT</th>
+                        <td><input class="stat" data-stat="int"></td>
+                        <th>REF</th>
+                        <td><input class="stat" data-stat="ref"></td>
+                    </tr>
+                    <tr>
+                        <td>DEX</td>
+                        <td><input class="stat" data-stat="dex"></td>
+                        <td>TECH</td>
+                        <td><input class="stat" data-stat="tech"></td>
+                    </tr>
+                    <tr>
+                        <td>COOL</td>
+                        <td><input class="stat" data-stat="cool"></td>
+                        <td>WILL</td>
+                        <td><input class="stat" data-stat="will"></td>
+                    </tr>
+                    <tr>
+                        <td>MOVE</td>
+                        <td><input class="stat" data-stat="move"></td>
+                        <td>BODY</td>
+                        <td><input class="stat" data-stat="body"></td>
+                    </tr>
+                    <tr>
+                        <td>EMP</td>
+                        <td><input class="stat" data-stat="emp"></td>
+                        <td>LUCK</td>
+                        <td><input class="stat" data-stat="luck"></td>
+                    </tr>
+                </table>
+    
+                <!-- ПЗ, БРОНЯ, РАНЕНИЯ -->
                 <table>
                     <thead>
                         <tr>
-                        <th>ПЗ</th>
-                        <th>Ранения</th>
+                        <th colspan="2">ПЗ</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><input class='inp1' type="text"></td>
-                            <td><input class='inp1' type="text"></td>
+                            <td><input></td>
+                            <td><input class = 'max_hp' readonly></td>
                         </tr>
                     </tbody>
                 </table>
+    
                 <table>
                     <thead>
                         <tr>
@@ -48,51 +86,528 @@
                     </thead>
                     <tbody>
                         <tr>
-                        <td><input class='inp1' type="text"></td>
-                        <td><input class='inp1' type="text"></td>
+                            <td><input></td>
+                            <td><input class="inint"></td>
                         </tr>
                         <tr>
-                            <td><input class='inp1' type="text"></td>
-                            <td><input class='inp1' type="text"></td>
+                            <td><input></td>
+                            <td><input class="inint"></td>                    
                         </tr>
                         <tr>
-                            <td><input class='inp1' type="text"></td>
-                            <td><input class='inp1' type="text"></td>
+                            <td><input></td>
+                            <td><input class="inint"></td>                   
                         </tr>
                     </tbody>
                 </table>
+                <button onclick="saveSkills()">Save</button>
                 Получение урона
-                </div>
-
-            <div class = "">
-                <table class="t">
-                    <tr><th>INT</th></tr>
-                    <tr><td>a</td></tr>
-                    <tr><th>INT</th></tr>
-                    <tr><td>a</td></tr>
-                    <tr><th>INT</th></tr>
-                    <tr><td>a</td></tr>
-                    <tr><th>INT</th></tr>
-                    <tr><td>a</td></tr>
+            </div>
+    
+            <div class="third_col">
+    
+                <!-- First column = (Восприятие, Физически, Дальний/Ближний) -->
+                <table class="skill" id="skill_table">
+                    <tr>
+                        <th>Awareness Skills</th>
+                        <th>LVL</th>
+                        <th>STAT</th>
+                        <th>MOD</th>
+                        <th>SUM</th>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Concetration (WILL)</th>
+                        <td><input type = 'text' class = 'level' data-skill="concetration"></td>
+                        <td><input class = 'stat-from' data-from="will" readonly></td>
+                        <td><input type = 'text' class = 'mod' data-skill="concetration"></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Canceal/Reveal Object (INT)</th>
+                        <td><input type = 'text' class = 'level' data-skill="canceal_reveal_object"></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod' data-skill="canceal_reveal_object"></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Lip Reading (INT)</th>
+                        <td><input type = 'text' class = 'level' data-skill="lip_reading"></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod' data-skill="lip_reading"></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Perceprion (INT)</th>
+                        <td><input type = 'text' class = 'level' data-skill="perception"></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod' data-skill="perception"></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Tracking (INT)</th>
+                        <td><input type = 'text' class = 'level' data-skill="tracking"></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod' data-skill="tracking"></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th>Body Skills</th>
+                        <th>LVL</th>
+                        <th>STAT</th>
+                        <th>MOD</th>
+                        <th>SUM</th>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Athletics (DEX)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="dex" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Contortionist (DEX)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="dex" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Dance (DEX)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="dex" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Endurance (WILL)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="will" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Resist Totrutr/Drugs (WILL)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="will" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Stealth (DEX)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="dex" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th>Fighting Skills</th>
+                        <th>LVL</th>
+                        <th>STAT</th>
+                        <th>MOD</th>
+                        <th>SUM</th>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Brawling (DEX)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="dex" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Evasion (DEX)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="dex" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Martial Arts (x2) (DEX)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="dex" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Melee Weapon (DEX)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="dex" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th>Ranged Weapon Skills</th>
+                        <th>LVL</th>
+                        <th>STAT</th>
+                        <th>MOD</th>
+                        <th>SUM</th>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Achery (REF)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="ref" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Autofire (x2) (REF)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="ref" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Handgun (REF)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="ref" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Heavy Weapons (x2) (REF)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="ref" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Schoulder Arms (REF)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="ref" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                </table>
+    
+                <!-- Second column = (Вождение, Технические) -->
+                <table class="skill" id="skill_table">
+                    <tr>
+                        <th>Control Skills</th>
+                        <th>LVL</th>
+                        <th>STAT</th>
+                        <th>MOD</th>
+                        <th>SUM</th>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Drive Land Vehicle (REF)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="ref" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Pilot Air Vehicle (x2) (REF)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="ref" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Pilot Sea Vehicle (REF)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="ref" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Riding (REF)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="ref" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th>Technique Skills</th>
+                        <th>LVL</th>
+                        <th>STAT</th>
+                        <th>MOD</th>
+                        <th>SUM</th>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Air Vehicle Tech (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Basic Tech (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Cybertechs (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Demolitions (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Electro/Sec Tech (x2) (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>First Aid (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Forgery (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Land Vehicle Tech (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Paint/Draw/Sculpt (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Paramedic (x2) (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Photo/Film (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Pick Pocket (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Sea Vehicle Tech (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Weaponstech (TECH)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="tech" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                </table>
+    
+                <!-- Third column = (Образовательые, Харизма) -->
+                <table class="skill" id="skill_table">
+                    <tr>
+                        <th>Social Skills</th>
+                        <th>LVL</th>
+                        <th>STAT</th>
+                        <th>MOD</th>
+                        <th>SUM</th>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Bribery (COOL)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="cool" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Conversation (EMP)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="emp" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Human Perception (EMP)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="emp" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Interrogation (COOL)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="cool" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Persuasion (COOL)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="cool" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Personal Grooming (COOL)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="cool" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Streetwise (COOL)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="cool" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Trading (COOL)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="cool" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Wardrobe & Style (COOL)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="cool" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Acting (COOL)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="cool" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th>Education Skills</th>
+                        <th>LVL</th>
+                        <th>STAT</th>
+                        <th>MOD</th>
+                        <th>SUM</th>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Accounting (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Animal Handling (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Bureaucracy (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Business (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Composition (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Criminology (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Cryptography (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Deduction (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Education (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Gamble (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>XXX (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Library Search (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Tactics (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
+                    <tr>
+                        <th class = 'skill_name'>Wilderness Survival (INT)</th>
+                        <td><input type = 'text' class = 'level'></td>
+                        <td><input class = 'stat-from' data-from="int" readonly></td>
+                        <td><input type = 'text' class = 'mod'></td>
+                        <td><input type = 'text' class = 'sum' readonly></td>
+                    </tr>
                 </table>
             </div>
-
-            <div class = "">
-                <table class="t">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>a</td>
-                            <td>b</td>
-                        </tr>
-                    </tbody>
-                </table>
-                </div>
         </div>
     </body>
+    <script src="{% static 'js/script.js' %}" defer></script>
 </html>

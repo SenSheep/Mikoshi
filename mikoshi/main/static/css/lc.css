@@ -1,28 +1,45 @@
 .main {
-    margin-top: 50px;
     display: grid;
-    grid-template-columns: 20% 25% 10% 45%;
+    grid-template-columns: 20% 17% 63%;
+    gap: 5px;
+    margin-top: 50px;
 }
 
 table {
-    width: 95%;
-    table-layout: fixed;
-}
-
-.t {
-    border: 2px solid black;
     border-collapse: collapse;
-    margin: auto;
+    width: 100%;
+    justify-self: center;
 }
 
-th, td {
+.third_col {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    gap: 2px;
+}
+
+td, th {
     border: 2px solid black;
     text-align: center;
 }
 
 th {
     background-color: black;
-    color: white
+    color: white;
+}
+
+.skill_name {
+    background-color: rgb(203, 9, 9);
+    color: white;
+}
+
+#skill_table input {
+    width: 50%;
+    text-align: center;
+}
+
+#stat_table input {
+    width: 50%;
+    text-align: center;
 }
 
 /* Стили для верхнего меню */
@@ -56,18 +73,4 @@ th {
 .menu a:hover {
     background: #530e07; /* Красный при наведении */
     border-radius: 5px;
-}
-
-button {
-    margin-top: 10px;
-    padding: 10px;
-    font-size: 16px;
-    background-color: black;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: red;
 }
