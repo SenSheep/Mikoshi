@@ -35,48 +35,13 @@ function updateSkillStats() {
 }) 
 }
 
-function collectSkills() {
-  const skills = {};
-
-  document.querySelectorAll('.level').forEach(input => {
-    const skill = input.dataset.skill;
-    if (!skills[skill]) skills[skill] = {};
-    skills[skill].level = parseInt(input.value || 0, 10);
-  });
-
-  document.querySelectorAll('.mod').forEach(input => {
-    const skill = input.dataset.skill;
-    if (!skills[skill]) skills[skill] = {};
-    skills[skill].mod = parseInt(input.value || 0, 10);
-  });
-
-  return skills;
-}
-
-function collectStats() {
-  const statMap = {};
-    document.querySelectorAll('.stat').forEach(input => {
-    const key = input.dataset.stat; // "int", "ref" и т.д.
-    statMap[key] = parseInt(input.value || "0", 10);
-});
-
-  return statMap;
-}
-
-function collectArmor() {
-  const armorMap = {};
-    document.querySelectorAll('.armor').forEach(input => {
-    const key = input.dataset.armor; // "head", "body", "shield"
-    armorMap[key] = parseInt(input.value || "0", 10);
-});
-  return armorMap;
-}
-
+// СОХРАНЕНИЕ ДАННЫХ
 function saveSkills() {
   const charId = document.body.dataset.charId;
   const skillsData = collectSkills();
   const statsData = collectStats();
   const armorData = collectArmor();
+  const name = document.querySelector('.name').value
 
   fetch('/api/save-char/', {
     method: 'POST',
@@ -88,6 +53,7 @@ function saveSkills() {
       skills: skillsData,
       stats: statsData,
       armor: armorData,
+      name: name,
     })
   })
   .then(response => response.json())
@@ -97,23 +63,6 @@ function saveSkills() {
       alert("Error: " + data.message);
     }
   });
-}
-
-function getDamage() {
-  const realHpField = document.querySelector('.real_hp');
-  const armor_bodyField = document.querySelector('input.armor[data-armor="body"]');
-  const damageField = document.querySelector('.damage');
-
-  const realHp = parseInt(realHpField.value, 10);
-  const armor_body = parseInt(armor_bodyField.value, 10);
-  const damage = parseInt(damageField.value, 10);
-
-  if (damage - armor_body < 0) {
-    return alert("Не пробил");
-  }
-  const real_damage = realHp - (damage - armor_body);
-  realHpField.value = real_damage;
-  armor_bodyField.value = armor_body - 1;
 }
 
 // Автоматический расчет значений
@@ -127,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+// начальное отображение сохраненный данных
 document.addEventListener("DOMContentLoaded", function () {
   const charId = document.body.dataset.charId;
 
@@ -137,14 +87,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const skills = data.skills;
         const stats = data.stats
         const armor = data.armor
+        const name = data.name
 
+        // СТАТЫ
         for (const [statName, value1] of Object.entries(stats)) {
           const statInput = document.querySelector(`.stat[data-stat="${statName}"]`);
 
           if (statInput) statInput.value = value1 ?? 0;
         }
 
-
+        // СКИЛЛЫ
         for (const [skillName, values2] of Object.entries(skills)) {
           const levelInput = document.querySelector(`.level[data-skill="${skillName}"]`);
           const modInput = document.querySelector(`.mod[data-skill="${skillName}"]`);
@@ -153,11 +105,16 @@ document.addEventListener("DOMContentLoaded", function () {
           if (modInput) modInput.value = values2.mod ?? 0;
         }
 
+        // БРОНЯ
         for (const [armorName, value3] of Object.entries(armor)) {
           const armorInput = document.querySelector(`.armor[data-armor="${armorName}"]`);
 
           if (armorInput) armorInput.value = value3 ?? 0;
         }
+        
+        // ИМЯ
+        const nameInput = document.querySelector(`.name`);
+        nameInput.value = name
 
       } else {
         console.error("Не удалось загрузить навыки:", data.message);
@@ -168,3 +125,4 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Ошибка запроса:", err);
     });
 });
+

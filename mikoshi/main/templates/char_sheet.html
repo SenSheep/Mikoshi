@@ -16,15 +16,14 @@
 
         <div class="main">
             <div class="first_col">
-                {{ character.id }}
                 <table class='name_role'>
                     <tr>
                         <td>Name</td>
-                        <td>{{ character.name }}</td>
+                        <td><input class = 'name'></td>
                     </tr>
                     <tr>
                         <td>Role</td>
-                        <td>{{ character.role }}</td>
+                        <td><input class = 'role'></td>
                     </tr>
                 </table>
             </div>
@@ -115,10 +114,23 @@
                 <!-- Затемнённый фон и модальное окно -->
                 Получение урона
                 <div id="modalOverlay" class="modal-overlay">
-                    <div class="modal">
+                    <div class="modal" style="display: grid">
                         <h2>Получение урона</h2>
-                        <input class = "damage">
-                        <button id="closeModalBtn" onclick="getDamage()">Получить урон</button>
+                        <div>
+                            <label><input type="checkbox" class="damageEffect" data-type="piercing"> Бронебойный</label><br>
+                            <label><input type="checkbox" class="damageEffect" data-type="through"> Сквозь броню</label><br>
+                            <label><input type="checkbox" class="damageEffect" data-type="piercingless"> Игнорирование 1/2 брони</label><br>                     
+                        </div>
+                        <table>
+                            <tr>
+                                <td><input class = "damage"></td>
+                                <td><input class = "heal"></td>
+                            </tr>
+                            <tr>
+                                <td><button id="closeModalBtn" onclick="getDamage()">Получить урон</button></td>
+                                <td><button id="closeModalBtn" onclick="getHeal()">Вылечиться</button></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
                                 <!-- Кнопка открытия -->
@@ -632,4 +644,5 @@
         </div>
     </body>
     <script src="{% static 'js/script.js' %}" defer></script>
+    <script src="{% static 'js/collectdata.js' %}" defer></script>
 </html>
