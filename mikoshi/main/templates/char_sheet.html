@@ -3,6 +3,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="{% static 'css/lc.css' %}">
+        <link rel="stylesheet" href="{% static 'css/modal_s.css' %}">
     </head>
     <body data-char-id="{{ character.id }}">
         <nav class="menu">
@@ -63,44 +64,65 @@
                 </table>
     
                 <!-- ПЗ, БРОНЯ, РАНЕНИЯ -->
-                <table>
+                <table id="hp_emp_armor">
                     <thead>
                         <tr>
-                        <th colspan="2">ПЗ</th>
+                        <th colspan="2">Пункты Здоровья</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><input></td>
+                            <td><input class = 'real_hp'></td>
                             <td><input class = 'max_hp' readonly></td>
                         </tr>
                     </tbody>
-                </table>
-    
-                <table>
+
                     <thead>
                         <tr>
-                        <th>Броня</th>
-                        <th>ОС</th>
+                        <th colspan="2">Человечность</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td><input></td>
-                            <td><input class="inint"></td>
+                            <td><input class = 'max_emp' readonly></td>
+                        </tr>
+                    </tbody>
+
+                    <thead>
+                        <tr>
+                        <th>Броня</th>
+                        <th>Прочность</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Голова</td>
+                            <td><input class="armor" data-armor="head"></td>
                         </tr>
                         <tr>
-                            <td><input></td>
-                            <td><input class="inint"></td>                    
+                            <td>Тело</td>
+                            <td><input class="armor" data-armor="body"></td>                    
                         </tr>
                         <tr>
-                            <td><input></td>
-                            <td><input class="inint"></td>                   
+                            <td>Щит</td>
+                            <td><input class="armor" data-armor="shield"></td>                   
                         </tr>
                     </tbody>
                 </table>
-                <button onclick="saveSkills()">Save</button>
+                
+                <script src="{% static 'js/modal_js.js' %}" defer></script>
+                <!-- Затемнённый фон и модальное окно -->
                 Получение урона
+                <div id="modalOverlay" class="modal-overlay">
+                    <div class="modal">
+                        <h2>Получение урона</h2>
+                        <input class = "damage">
+                        <button id="closeModalBtn" onclick="getDamage()">Получить урон</button>
+                    </div>
+                </div>
+                                <!-- Кнопка открытия -->
+                <button id="openModalBtn">Открыть окно</button>
             </div>
     
             <div class="third_col">

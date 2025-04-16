@@ -3,6 +3,7 @@
     grid-template-columns: 20% 17% 63%;
     gap: 5px;
     margin-top: 50px;
+    font-family: Arial, Helvetica, sans-serif
 }
 
 table {
@@ -34,10 +35,17 @@ th {
 
 #skill_table input {
     width: 50%;
+    height: 100%;
     text-align: center;
+    border: none;
 }
 
 #stat_table input {
+    width: 50%;
+    text-align: center;
+}
+
+#hp_emp_armor input {
     width: 50%;
     text-align: center;
 }
