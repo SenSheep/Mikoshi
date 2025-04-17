@@ -33,6 +33,11 @@ th {
     color: white;
 }
 
+#weapon input {
+    width: 50%;
+    text-align: center;
+}
+
 #skill_table input {
     width: 50%;
     height: 100%;

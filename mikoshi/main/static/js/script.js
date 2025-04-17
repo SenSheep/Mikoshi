@@ -41,7 +41,10 @@ function saveSkills() {
   const skillsData = collectSkills();
   const statsData = collectStats();
   const armorData = collectArmor();
-  const name = document.querySelector('.name').value
+  const name = document.querySelector('.name').value;
+  const role = document.querySelector('.role').value;
+  const hp = document.querySelector('.real_hp').value;
+
 
   fetch('/api/save-char/', {
     method: 'POST',
@@ -54,6 +57,9 @@ function saveSkills() {
       stats: statsData,
       armor: armorData,
       name: name,
+      role: role,
+      hp: hp,
+      
     })
   })
   .then(response => response.json())
@@ -68,7 +74,7 @@ function saveSkills() {
 // Автоматический расчет значений
 document.addEventListener("DOMContentLoaded", function () {
     // Обновление суммы при изменении level или mod или stat
-    document.querySelectorAll(".level, .mod, .stat, .armor").forEach(input => {
+    document.querySelectorAll(".level, .mod, .stat, .armor, .name, .role, .real_hp").forEach(input => {
       input.addEventListener("input", () => {
         updateSkillStats();
         saveSkills(); // автоматическое сохранение при любом изменении
@@ -85,9 +91,11 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
       if (data.status === "ok") {
         const skills = data.skills;
-        const stats = data.stats
-        const armor = data.armor
-        const name = data.name
+        const stats = data.stats;
+        const armor = data.armor;
+        const name = data.name;
+        const role = data.role;
+        const hp = data.hp;
 
         // СТАТЫ
         for (const [statName, value1] of Object.entries(stats)) {
@@ -114,7 +122,15 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // ИМЯ
         const nameInput = document.querySelector(`.name`);
-        nameInput.value = name
+        if (nameInput) nameInput.value = name ?? '';
+
+        // РОЛЬ
+        const roleInput = document.querySelector(`.role`);
+        if (roleInput) roleInput.value = role ?? '';
+
+        // REAL HP
+        const hpInput = document.querySelector(`.real_hp`);
+        if (hpInput) hpInput.value = hp ?? 0;
 
       } else {
         console.error("Не удалось загрузить навыки:", data.message);
