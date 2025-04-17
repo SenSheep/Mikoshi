@@ -1,0 +1,34 @@
+/* Вкладки НАВЫКОВ, ИНВЕНТАРЯ, КИБЕРИМПЛАНТОВ */
+.third_col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-x: auto;
+  }
+  
+  /* Кнопки в ряд */
+  .tab-header {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .tab-btn {
+    flex: 1;
+    padding: 8px;
+    background: #eee;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .tab-btn.active {
+    background: #ccc;
+  }
+  
+  /* Скрытие неактивных вкладок */
+  .tab-content {
+    display: none;
+  }
+  
+  .tab-content.active {
+    display: flex;
+  }

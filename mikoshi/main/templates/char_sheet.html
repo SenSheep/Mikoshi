@@ -4,6 +4,7 @@
     <head>
         <link rel="stylesheet" href="{% static 'css/lc.css' %}">
         <link rel="stylesheet" href="{% static 'css/modal_s.css' %}">
+        <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
     </head>
     <body data-char-id="{{ character.id }}">
         <nav class="menu">
@@ -181,6 +182,7 @@
                   </div>
     
                 <!-- First column = (Восприятие, Физически, Дальний/Ближний) -->
+                <div class="tab-content active" data-tab="skills">
                 <table class="skill" id="skill_table">
                     <tr>
                         <th>Awareness Skills</th>
@@ -681,9 +683,21 @@
                         <td><input type = 'text' class = 'sum' readonly></td>
                     </tr>
                 </table>
+                </div>
+
+                <!-- Заглушки под будущий контент -->
+                <div class="tab-content" data-tab="inventory">
+                    <p>Инвентарь (в разработке)</p>
+                </div>
+
+                <div class="tab-content" data-tab="cyberware">
+                    <p>Киберимпланты (в разработке)</p>
+                </div>
+
             </div>
         </div>
     </body>
+    <script src="{% static 'js/tabs.js' %}" defer></script>
     <script src="{% static 'js/script.js' %}" defer></script>
     <script src="{% static 'js/collectdata.js' %}" defer></script>
 </html>

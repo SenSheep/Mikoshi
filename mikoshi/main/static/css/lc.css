@@ -12,12 +12,6 @@ table {
     justify-self: center;
 }
 
-.third_col {
-    display: grid;
-    grid-template-columns: 33% 33% 33%;
-    gap: 2px;
-}
-
 td, th {
     border: 2px solid black;
     text-align: center;
