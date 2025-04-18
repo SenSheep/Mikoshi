@@ -17,20 +17,20 @@
         <div class="black-carpet"></div>
     </div>
 
-    <h1>WELCOME TO MIKOSHI</h1>
-    <h3>A Perfect Digital Prison For Your Characters</h3>
+    <h1 style="text-align: center;">Добро пожаловать в <br> Микоши</h1>
+    <h3>Идеальное цифровое хранилище для ваших персонажей</h3>
 
     {% if user.is_authenticated %}
-        <p>Good day, Mr. {{ user.username }}</p>
+        <p>Приветсвуют, Мр. {{ user.username }}</p>
         <div class="button-container">
-            <a href="{% url 'profile' %}">Continue</a>
-            <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'profile' %}">Продолжить</a>
+            <a href="{% url 'logout' %}">Выйти</a>
         </div>
     {% else %}
-        <p>Please complete the authorization process</p>
+        <p>Пожалуйста, пройдите процесс авторизации</p>
         <div class="button-container">
-            <a href="{% url 'login' %}">Login</a>
-            <a href="{% url 'register' %}">Sign Up</a>
+            <a href="{% url 'login' %}">Войти</a>
+            <a href="{% url 'register' %}">Зарегестрироваться</a>
         </div>
     {% endif %}
 </body>
