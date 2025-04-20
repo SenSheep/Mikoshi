@@ -9,4 +9,5 @@ class Character(models.Model):
     stats = models.JSONField(default=dict)
     skills = models.JSONField(default=dict)
     armor = models.JSONField(default=dict)
+    inventory = models.JSONField(default=dict)
     created_at = models.DateTimeField(auto_now_add=True)

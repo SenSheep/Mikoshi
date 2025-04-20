@@ -38,9 +38,10 @@ function updateSkillStats() {
 // СОХРАНЕНИЕ ДАННЫХ
 function saveSkills() {
   const charId = document.body.dataset.charId;
-  const skillsData = collectSkills();
+  const skillsData = collectSkills() || 0;
   const statsData = collectStats();
   const armorData = collectArmor();
+  const inventory = collectInventory();
   const name = document.querySelector('.name').value;
   const role = document.querySelector('.role').value;
   const hp = document.querySelector('.real_hp').value;
@@ -59,6 +60,7 @@ function saveSkills() {
       name: name,
       role: role,
       hp: hp,
+      inventory, inventory,
       
     })
   })
@@ -71,10 +73,20 @@ function saveSkills() {
   });
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const table = document.getElementById('inventory_table');
+
+  table.addEventListener('focusout', (event) => {
+    const target = event.target;
+    if (target.classList.contains('item_name') || target.classList.contains('item_desc')) {
+      saveSkills();  // или saveInventory()
+    }
+  });
+});
+
 // Автоматический расчет значений
 document.addEventListener("DOMContentLoaded", function () {
-    // Обновление суммы при изменении level или mod или stat
-    document.querySelectorAll(".level, .mod, .stat, .armor, .name, .role, .real_hp").forEach(input => {
+    document.querySelectorAll(".level, .mod, .stat, .armor, .name, .role, .real_hp, .item_name, .item_desc").forEach(input => {
       input.addEventListener("input", () => {
         updateSkillStats();
         saveSkills(); // автоматическое сохранение при любом изменении
@@ -96,6 +108,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const name = data.name;
         const role = data.role;
         const hp = data.hp;
+        
+        // ИНВЕНТАРЬ
+        loadInventory(data.inventory)
 
         // СТАТЫ
         for (const [statName, value1] of Object.entries(stats)) {

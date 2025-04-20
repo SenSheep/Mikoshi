@@ -183,6 +183,7 @@
     
                 <!-- First column = (Восприятие, Физически, Дальний/Ближний) -->
                 <div class="tab-content active" data-tab="skills">
+                <div class="skills-scroll-area">
                 <table class="skill" id="skill_table">
                     <tr>
                         <th>Awareness Skills</th>
@@ -684,12 +685,27 @@
                     </tr>
                 </table>
                 </div>
-
-                <!-- Заглушки под будущий контент -->
-                <div class="tab-content" data-tab="inventory">
-                    <p>Инвентарь (в разработке)</p>
                 </div>
 
+                <!-- ВТОРАЯ ВКЛАДКА С ИНВЕНТАРЕМ -->
+                <input type="hidden" id="itemCounter" value="0">
+                <div class="tab-content" data-tab="inventory">
+                    <button onclick="addRow()">Добавить строку</button>
+                    <table id="inventory_table">
+                        <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Описание</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- строки будут добавляться сюда -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ТРЕТЬЯ ВКЛАДКА С ИНВЕНТАРЕМ -->
                 <div class="tab-content" data-tab="cyberware">
                     <p>Киберимпланты (в разработке)</p>
                 </div>
@@ -697,7 +713,7 @@
             </div>
         </div>
     </body>
-    <script src="{% static 'js/tabs.js' %}" defer></script>
     <script src="{% static 'js/script.js' %}" defer></script>
+    <script src="{% static 'js/tabs.js' %}" defer></script>
     <script src="{% static 'js/collectdata.js' %}" defer></script>
 </html>
