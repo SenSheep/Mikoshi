@@ -5,3 +5,4 @@ guide.ipynb
 /test_django
 mikoshi/db.sqlite3
 mikoshi/mysite/settings.py
+mikoshi/db.sqlite3
