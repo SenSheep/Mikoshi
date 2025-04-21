@@ -10,35 +10,34 @@
     align-items: center;
     z-index: 1000;
   }
-  
-  .modal {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    max-width: 500px;
-    width: 80%;
-    position: relative;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  }
-  
-  .close {
-    position: absolute;
-    right: 15px;
-    top: 10px;
-    font-size: 24px;
-    cursor: pointer;
-  }
 
-  .mod-option {
-    background: #ffffff;
-    margin: 8px 0;
-    padding: 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  
-  .mod-option:hover {
-    background: #d2d2d2;
-  }
-  
+.modal {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 80%;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.mod-option {
+  background: #ffffff;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.mod-option:hover {
+  background: #d2d2d2;
+}

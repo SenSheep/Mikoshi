@@ -68,44 +68,27 @@ function getDamage() {
   return;
 }
 
+// ЛЕЧЕНИЕ
+function getHeal() {
+  const realHpField = document.querySelector('.real_hp');
+  const healField = document.querySelector('.heal');
+  const maxHpField = document.querySelector('.max_hp');
+
+  const maxHp = parseInt(maxHpField.value, 10) || 0;
+  const realHp = parseInt(realHpField.value, 10) || 0;
+  const heal = parseInt(healField.value, 10) || 0;
+
+  if ((realHp + heal) >= maxHp) {
+    realHpField.value = maxHp;
+    saveSkills();
+    return;
+  }
+  realHpField.value = realHp + heal;
+  saveSkills();
+}
+
 // --- Модалка для киберимплантов ---
-// Данные по имплантам находятся в файле cyber.js
-const cyberModCatalog = {
-    eye: [
-      {
-        name: "Thermal Vision",
-        cost: 500,
-        hl: 2,
-        slot: "Cybereye",
-        desc: "Позволяет видеть тепловые сигнатуры в полной темноте."
-      },
-      {
-        name: "Targeting Scope",
-        cost: 750,
-        hl: 3,
-        slot: "Cybereye",
-        desc: "Добавляет прицеливание с автофиксацией цели."
-      }
-    ],
-    audio: [
-      {
-        name: "Amplified Hearing",
-        cost: 300,
-        hl: 1,
-        slot: "Cyberaudio",
-        desc: "Повышенная чувствительность слуха, слышит шёпот сквозь стены."
-      },
-      {
-        name: "Radio Receiver",
-        cost: 450,
-        hl: 2,
-        slot: "Cyberaudio",
-        desc: "Позволяет принимать радиопередачи напрямую в мозг."
-      }
-    ]
-  };
-
-
+// Данные по имплантам находятся в файле cyberware.js
 let currentCyberTarget = null;
 
 document.querySelectorAll('.add-mod').forEach(button => {
@@ -128,11 +111,11 @@ function showModOptions(target) {
     div.className = "mod-option";
     div.innerHTML = `
       <strong>${mod.name}</strong><br>
-      💰 ${mod.cost} eb | 🧠 HL: ${mod.hl} | 📍 ${mod.slot}<br>
+      💰 Price: ${mod.cost} | 🧠 HL: ${mod.hl} | 📍 ${mod.slot}<br>
       <em>${mod.desc}</em>
     `;
     div.addEventListener('click', () => {
-      addModification(target, mod.name);
+      addModification(target, mod.name, mod.desc);
       closeModModal();
     });
     container.appendChild(div);
@@ -140,15 +123,15 @@ function showModOptions(target) {
 }
 
 // Универсальная функция добавления
-function addModification(targetId, modName) {
+function addModification(targetId, modName, modDesc) {
   const modList = document.querySelector(`.mod-list[data-for="${targetId}"]`);
   if (!modList) return;
 
   const modDiv = document.createElement('div');
   modDiv.classList.add('mod');
   modDiv.innerHTML = `
-    <span>${modName}</span>
-    <button class="remove-mod">✖</button>
+    <h4>${modName} <button class="remove-mod">✖</button></h4>
+    <p>${modDesc}</p>
   `;
   modDiv.querySelector('.remove-mod').addEventListener('click', () => {
     modDiv.remove();

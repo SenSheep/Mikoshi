@@ -11,7 +11,7 @@ function updateSkillStats() {
   // Получаем максимальное hp
   let sbody = statMap['body']
   let swill = statMap['will'] 
-  let max_hp = swill + sbody
+  let max_hp = 10 + (5 * Math.ceil((swill + sbody) /2))
 
   const maxHpField = document.querySelector('.max_hp');
   if (maxHpField) {

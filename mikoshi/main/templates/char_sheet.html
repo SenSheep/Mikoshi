@@ -19,11 +19,11 @@
             <div class="first_col">
                 <table class='name_role'>
                     <tr>
-                        <td>Name</td>
+                        <td>Имя</td>
                         <td><input class = 'name'></td>
                     </tr>
                     <tr>
-                        <td>Role</td>
+                        <td>Роль</td>
                         <td><input class = 'role'></td>
                     </tr>
                 </table>
@@ -67,33 +67,33 @@
             <div class="second_col">
                 <table id="stat_table">
                     <tr>
-                        <th>INT</th>
+                        <th>ИНТ</th>
                         <td><input class="stat" data-stat="int"></td>
-                        <th>REF</th>
+                        <th>РЕА</th>
                         <td><input class="stat" data-stat="ref"></td>
                     </tr>
                     <tr>
-                        <td>DEX</td>
+                        <td>ЛВК</td>
                         <td><input class="stat" data-stat="dex"></td>
-                        <td>TECH</td>
+                        <td>ТЕХ</td>
                         <td><input class="stat" data-stat="tech"></td>
                     </tr>
                     <tr>
-                        <td>COOL</td>
+                        <td>ХАР</td>
                         <td><input class="stat" data-stat="cool"></td>
-                        <td>WILL</td>
+                        <td>ВОЛЯ</td>
                         <td><input class="stat" data-stat="will"></td>
                     </tr>
                     <tr>
-                        <td>MOVE</td>
+                        <td>СКО</td>
                         <td><input class="stat" data-stat="move"></td>
-                        <td>BODY</td>
+                        <td>ТЕЛ</td>
                         <td><input class="stat" data-stat="body"></td>
                     </tr>
                     <tr>
-                        <td>EMP</td>
+                        <td>ЭМП</td>
                         <td><input class="stat" data-stat="emp"></td>
-                        <td>LUCK</td>
+                        <td>УДЧ</td>
                         <td><input class="stat" data-stat="luck"></td>
                     </tr>
                 </table>
@@ -107,7 +107,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><input class = 'real_hp'></td>
+                            <td><input type = 'number' class = 'real_hp' readonly></td>
                             <td><input class = 'max_hp' readonly></td>
                         </tr>
                     </tbody>
@@ -849,6 +849,7 @@
             </div>
         </div>
     </body>
+    <script src="{% static 'js/cyberware.js' %}"></script>
     <script src="{% static 'js/script.js' %}" defer></script>
     <script src="{% static 'js/tabs.js' %}" defer></script>
     <script src="{% static 'js/collectdata.js' %}" defer></script>
