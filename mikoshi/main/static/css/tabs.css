@@ -43,3 +43,34 @@
   padding: 10px;
   border: 1px solid #ccc;
 }
+
+/* ВКЛАДКА КИБЕРИМПЛАНТОВ */
+.cyberware-grid {
+  display: grid;
+  grid-template-columns: 25% 25% 25%;
+  gap: 20px;
+  padding: 20px;
+}
+
+.cyberware-block {
+  background: #ffffff;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.cyberware-section {
+  border-collapse: collapse;
+  border: 2px solid #000000;
+}
+
+.cyberware-section:first-child {
+  border-bottom: none;
+}
+
+.cyberware-section h4 {
+  background-color: black;
+  color: white; 
+  margin: 0; 
+  font-size: 16px;
+  padding-bottom: 1px;
+}

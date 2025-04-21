@@ -28,4 +28,17 @@
     font-size: 24px;
     cursor: pointer;
   }
+
+  .mod-option {
+    background: #ffffff;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .mod-option:hover {
+    background: #d2d2d2;
+  }
   
