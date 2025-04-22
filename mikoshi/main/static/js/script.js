@@ -172,7 +172,8 @@ document.addEventListener("DOMContentLoaded", function () {
 function showRoleDesc() {
   const role = document.querySelector('.role').value;
   const rolelevel = parseInt(document.getElementById('role_level').value, 10) || 0;
-  const roleDescField = document.getElementById('role_desc')
+  const roleDescField = document.getElementById('solorole')
+  roleDescField.innerHTML = ''
 
   if (role === 'rocker') {
     if (rolelevel >= 1 && rolelevel <= 2) {
@@ -187,36 +188,123 @@ function showRoleDesc() {
       const desc = rockerLevels["5-6"];
       roleDescField.innerHTML = desc
     }
-    if (rolelevel >= 7 && rolelevel <= 7) {
+    if (rolelevel >= 7 && rolelevel <= 8) {
       const desc = rockerLevels["7-8"];
       roleDescField.innerHTML = desc
     }
-    if (rolelevel >= 9 && rolelevel <= 10) {
-      const desc = rockerLevels["9-10"];
+    if (rolelevel === 9) {
+      const desc = rockerLevels["9"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel === 10) {
+      const desc = rockerLevels["10"];
       roleDescField.innerHTML = desc
     }
   }
 
   if (role === 'solo') {
-    if (rolelevel >= 1 && rolelevel <= 2) {
-      const desc = rockerLevels["1-2"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 3 && rolelevel <= 4) {
-      const desc = rockerLevels["3-4"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 5 && rolelevel <= 6) {
-      const desc = rockerLevels["5-6"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 7 && rolelevel <= 7) {
-      const desc = rockerLevels["7-8"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 9 && rolelevel <= 10) {
-      const desc = rockerLevels["9-10"];
-      roleDescField.innerHTML = desc
+    roleDescField.innerHTML = `
+      <div id="soloAbilities">
+      <h3>Боевое чутье</h3>
+      <p>Доступно очков: <span id="availablePoints"></span></p>
+    
+      <div class="ability-block" data-ability="deflection">
+        <h4>▶ Отражение урона: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
+        <p class="effect-text">Нет бонуса</p>
+      </div>
+    
+      <div class="ability-block" data-ability="initiative">
+        <h4>▶ Личная инициатива: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
+        <p class="effect-text">Нет бонуса</p>
+      </div>
+    
+      <div class="ability-block" data-ability="accuracy">
+        <h4>▶ Точная атака: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
+        <p class="effect-text">Нет бонуса</p>
+      </div>
+
+      <div class="ability-block" data-ability="nofail">
+        <h4>▶ Умелое обращение: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
+        <p class="effect-text">Нет бонуса</p>
+      </div>
+
+      <div class="ability-block" data-ability="findweak">
+        <h4>▶ Выявление слабостей: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
+        <p class="effect-text">Нет бонуса</p>
+      </div>
+
+      <div class="ability-block" data-ability="percept">
+        <h4>▶ Обнаружение угроз: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
+        <p class="effect-text">Нет бонуса</p>
+      </div>
+    
+      <!-- Добавь другие способности по аналогии -->
+    </div>
+    `
+    const availablePointsSpan = document.getElementById('availablePoints');
+    let maxPoints = rolelevel;
+    availablePointsSpan.textContent = maxPoints;
+
+    document.querySelectorAll(".ability-block").forEach(block => {
+      const plus = block.querySelector(".plus");
+      const minus = block.querySelector(".minus");
+      const pointsSpan = block.querySelector(".points");
+      const effectText = block.querySelector(".effect-text");
+
+      plus.addEventListener("click", () => {
+        let current = parseInt(pointsSpan.textContent);
+        if (maxPoints > 0) {
+          current++;
+          maxPoints--;
+          pointsSpan.textContent = current;
+          updateEffect(block.dataset.ability, current, effectText);
+        }
+        availablePointsSpan.textContent = maxPoints;
+      });
+
+      minus.addEventListener("click", () => {
+        let current = parseInt(pointsSpan.textContent);
+        if (current > 0) {
+          current--;
+          maxPoints++;
+          pointsSpan.textContent = current;
+          updateEffect(block.dataset.ability, current, effectText);
+        }
+        availablePointsSpan.textContent = maxPoints;
+      });
+    });
+
+    function updateEffect(ability, points, el) {
+      switch (ability) {
+        case "deflection":
+          const reduction = Math.floor(points / 2);
+          if (points > 0) el.textContent = `Снижает первый урон в раунде на ${reduction}`;
+          else el.textContent = `Нет бонуса`;
+          break;
+        case "initiative":
+          if (points > 0) el.textContent = `+${points} к инициативе`;
+          else el.textContent = `Нет бонуса`;
+          break;
+        case "accuracy":
+          if (points >= 9) el.textContent = `+3 к попаданию`;
+          else if (points >= 6) el.textContent = `+2 к попаданию`;
+          else if (points >= 3) el.textContent = `+1 к попаданию`;
+          else el.textContent = `Нет бонуса`;
+          break;
+        case "nofail":
+          if (points >= 4) el.textContent = "Игнорирование критических провалов во время атак";
+          else el.textContent = "Нет бонуса";
+          break;
+        case "findweak":
+          if (points > 0) el.textContent = `+${points} к урону (до брони) для первой успешной атаки`;
+          else el.textContent = `Нет бонуса`;
+          break;
+        case "percept":
+          if (points > 0) el.textContent = `+${points} к внимательности`;
+          else el.textContent = `Нет бонуса`;
+          break;
+        // Добавь остальные способности аналогично
+      }
     }
   }
 

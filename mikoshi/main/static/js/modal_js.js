@@ -175,7 +175,8 @@ document.querySelectorAll('input[name="role-choice"]').forEach(radio => {
 
     document.getElementById("modalOverlayRole").style.display = "none";
 
-    saveSkills()
+    showRoleDesc();
+    saveSkills();
   });
 });
 
