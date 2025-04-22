@@ -1,7 +1,112 @@
-<h2>Создание персонажа</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Создать</button>
-</form>
-<a href="{% url 'profile' %}">Назад к списку</a>
+{% load static %}
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/standart.css' %}">
+    <h2>Создание персонажа</h2>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+      
+        <label for="charName">Имя персонажа:
+            <input type="text" id="charName" name="name" required>
+        </label>
+              
+        <div style = "display: grid;  grid-template-columns: repeat(5, 1fr);
+        width: 100%; gap: 40px;" class="roles">
+            <!-- СОЛО -->
+            <label class="role-card">
+                <input type="radio" name="role" value="solo" required>
+                <div class="card-content">
+                    <h3>Соло</h3>
+                    <p>Боец, наёмник, охранник или Машина для убийств.</p>
+                </div>
+            </label>
+          <!-- РОКЕРБОЙ -->
+          <label class="role-card">
+            <input type="radio" name="role" value="rocker">
+            <div class="card-content">
+              <h3>Рокербой</h3>
+              <p>Оратор, способный вдохновлять массы и поднимать восстания одним своим словом</p>
+            </div>
+          </label>
+          
+          <!-- НЕТРАННЕР -->
+          <label class="role-card">
+            <input type="radio" name="role" value="netrunner">
+            <div class="card-content">
+              <h3>Нетраннер</h3>
+              <p>Хакер, владеющий сетью и киберпространством.</p>
+            </div>
+          </label>
+
+          <!-- ТЕХНИК -->
+          <label class="role-card">
+            <input type="radio" name="role" value="techie" required>
+            <div class="card-content">
+              <h3>Техник</h3>
+              <p>Инженер, механик, специалист по имплантам. </p>
+            </div>
+          </label>
+
+          <!-- МЕДТЕХ -->
+          <label class="role-card">
+            <input type="radio" name="role" value="medtech" required>
+            <div class="card-content">
+              <h3>Медтех</h3>
+              <p>Хирург, фармацевт или биоинженер. Спасает жизни... или создаёт новое оружие</p>
+            </div>
+          </label>
+
+          <!-- МЕДИА -->
+          <label class="role-card">
+            <input type="radio" name="role" value="media" required>
+            <div class="card-content">
+              <h3>Медиа</h3>
+              <p>Журналист, охотник за правдой. Его камера опаснее пистолета, а эфир — поле битвы</p>
+            </div>
+          </label>
+
+          <!-- КОРПОРАТ -->
+          <label class="role-card">
+            <input type="radio" name="role" value="corporate" required>
+            <div class="card-content">
+              <h3>Корпорат</h3>
+              <p>Представитель корпорации. Деньги, власть и закулисные интриги</p>
+            </div>
+          </label>
+
+          <!-- ЗАКОННИК -->
+          <label class="role-card">
+            <input type="radio" name="role" value="lawman" required>
+            <div class="card-content">
+              <h3>Законник</h3>
+              <p>Ходячий закон. Часто — последний рубеж между порядком и хаосом</p>
+            </div>
+          </label>
+
+          <!-- ФИКСЕР -->
+          <label class="role-card">
+            <input type="radio" name="role" value="fixer" required>
+            <div class="card-content">
+              <h3>Фиксер</h3>
+              <p>Брокер теней, посредник, дилер. Если тебе что-то нужно — он уже это достал</p>
+            </div>
+          </label>
+
+          <!-- КОЧЕВНИК -->
+          <label class="role-card">
+            <input type="radio" name="role" value="nomad" required>
+            <div class="card-content">
+              <h3>Кочевник</h3>
+              <p>Водитель, рейдер, курьер. Живёт дорогой и дышит свободой</p>
+            </div>
+          </label>
+        </div>
+      
+        <button type="submit">Создать</button>
+      </form>
+      
+    <a href="{% url 'profile' %}">Назад к списку</a>
+</body>
+</html>

@@ -24,7 +24,117 @@
                     </tr>
                     <tr>
                         <td>Роль</td>
-                        <td><input class = 'role'></td>
+                            <td>
+                            <input class="role-choice" id="roleInput" readonly>
+                            <input type="hidden" class="role" id="roleHiddenInput">
+                            <div id="modalOverlayRole" class="modal-overlay" style="display: none;">
+                                <div class="modal">
+                                <h3>Выберите новую роль:</h3>
+                                <div style = "display: grid;  grid-template-columns: repeat(5, 1fr);
+                                width: 100%; gap: 40px;" class="roles">
+                                    <!-- СОЛО -->
+                                    <label class="role-card">
+                                        <input type="radio" name="role-choice" value="solo" required>
+                                        <div class="card-content">
+                                            <h3>Соло</h3>
+                                            <p>Боец, наёмник, охранник или Машина для убийств.</p>
+                                        </div>
+                                    </label>
+                                    <!-- РОКЕРБОЙ -->
+                                    <label class="role-card">
+                                        <input type="radio" name="role-choice" value="rocker">
+                                        <div class="card-content">
+                                        <h3>Рокербой</h3>
+                                        <p>Оратор, способный вдохновлять массы и поднимать восстания одним своим словом</p>
+                                        </div>
+                                    </label>
+                                    
+                                    <!-- НЕТРАННЕР -->
+                                    <label class="role-card">
+                                        <input type="radio" name="role-choice" value="netrunner">
+                                        <div class="card-content">
+                                        <h3>Нетраннер</h3>
+                                        <p>Хакер, владеющий сетью и киберпространством.</p>
+                                        </div>
+                                    </label>
+
+                                    <!-- ТЕХНИК -->
+                                    <label class="role-card">
+                                        <input type="radio" name="role-choice" value="techie" required>
+                                        <div class="card-content">
+                                        <h3>Техник</h3>
+                                        <p>Инженер, механик, специалист по имплантам. </p>
+                                        </div>
+                                    </label>
+
+                                    <!-- МЕДТЕХ -->
+                                    <label class="role-card">
+                                        <input type="radio" name="role-choice" value="medtech" required>
+                                        <div class="card-content">
+                                        <h3>Медтех</h3>
+                                        <p>Хирург, фармацевт или биоинженер. Спасает жизни... или создаёт новое оружие</p>
+                                        </div>
+                                    </label>
+
+                                    <!-- МЕДИА -->
+                                    <label class="role-card">
+                                        <input type="radio" name="role-choice" value="media" required>
+                                        <div class="card-content">
+                                        <h3>Медиа</h3>
+                                        <p>Журналист, охотник за правдой. Его камера опаснее пистолета, а эфир — поле битвы</p>
+                                        </div>
+                                    </label>
+
+                                    <!-- КОРПОРАТ -->
+                                    <label class="role-card">
+                                        <input type="radio" name="role-choice" value="corporate" required>
+                                        <div class="card-content">
+                                        <h3>Корпорат</h3>
+                                        <p>Представитель корпорации. Деньги, власть и закулисные интриги</p>
+                                        </div>
+                                    </label>
+
+                                    <!-- ЗАКОННИК -->
+                                    <label class="role-card">
+                                        <input type="radio" name="role-choice" value="lawman" required>
+                                        <div class="card-content">
+                                        <h3>Законник</h3>
+                                        <p>Ходячий закон. Часто — последний рубеж между порядком и хаосом</p>
+                                        </div>
+                                    </label>
+
+                                    <!-- ФИКСЕР -->
+                                    <label class="role-card">
+                                        <input type="radio" name="role-choice" value="fixer" required>
+                                        <div class="card-content">
+                                        <h3>Фиксер</h3>
+                                        <p>Брокер теней, посредник, дилер. Если тебе что-то нужно — он уже это достал</p>
+                                        </div>
+                                    </label>
+
+                                    <!-- КОЧЕВНИК -->
+                                    <label class="role-card">
+                                        <input type="radio" name="role-choice" value="nomad" required>
+                                        <div class="card-content">
+                                        <h3>Кочевник</h3>
+                                        <p>Водитель, рейдер, курьер. Живёт дорогой и дышит свободой</p>
+                                        </div>
+                                    </label>
+                                </div>
+                                <button onclick="closeRoleModal()">Закрыть</button>
+                                </div>
+                            </div>
+
+                            <button onclick="toggleRoleEdit()">Изменить роль</button>
+                            </td>
+
+                    </tr>
+                    <tr>
+                        <td>Ролевая способность</td>
+                        <td><input class='role_level' type="number" id="role_level" max="10" min="1"> Уровень</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><div id='role_desc'></td> <!--  ОПИСАНИЕ РОЛЕВОЙ СПОСОБНОСТИ -->
                     </tr>
                 </table>
                 <table id="weapon">
@@ -146,7 +256,6 @@
                     </tbody>
                 </table>
                 
-                <script src="{% static 'js/modal_js.js' %}" defer></script>
                 <!-- Затемнённый фон и модальное окно -->
                 Получение урона
                 <div id="modalOverlayDamage" class="modal-overlay">
@@ -849,8 +958,10 @@
             </div>
         </div>
     </body>
+    <script src="{% static 'js/roleleveldesc.js' %}"></script>
     <script src="{% static 'js/cyberware.js' %}"></script>
     <script src="{% static 'js/script.js' %}" defer></script>
     <script src="{% static 'js/tabs.js' %}" defer></script>
     <script src="{% static 'js/collectdata.js' %}" defer></script>
+    <script src="{% static 'js/modal_js.js' %}" defer></script>
 </html>

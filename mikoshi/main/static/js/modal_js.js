@@ -146,3 +146,40 @@ document.getElementById("closeModModal").addEventListener("click", () => {
 document.getElementById("modalOverlayCyber").addEventListener("click", function (e) {
   if (e.target === this) this.style.display = "none";
 });
+
+// МОДАЛКА ДЛЯ ИЗМЕНЕНИЕ РОЛИ
+function toggleRoleEdit() {
+  document.getElementById("modalOverlayRole").style.display = "flex";
+}
+
+function closeRoleModal() {
+  document.getElementById("modalOverlayRole").style.display = "none";
+}
+
+document.getElementById("modalOverlayRole").addEventListener("click", function (e) {
+  if (e.target === this) this.style.display = "none";
+  
+});
+
+// При выборе новой роли
+document.querySelectorAll('input[name="role-choice"]').forEach(radio => {
+  radio.addEventListener('change', function () {
+    const selectedValue = this.value;
+    const selectedText = this.closest('.role-card').querySelector('h3').innerText;
+
+    // Сохраняем реальное значение для отправки формы
+    document.getElementById("roleHiddenInput").value = selectedValue;
+
+    // Отображаем выбранную роль в input
+    document.getElementById("roleInput").value = selectedText;
+
+    document.getElementById("modalOverlayRole").style.display = "none";
+
+    saveSkills()
+  });
+});
+
+function toggleRoleEdit() {
+  const roleBlock = document.getElementById('modalOverlayRole');
+  roleBlock.style.display = roleBlock.style.display === 'none' ? 'flex' : 'none';
+}

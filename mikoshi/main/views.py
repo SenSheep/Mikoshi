@@ -73,6 +73,8 @@ def save_char(request):
         role = data.get('role')
         hp = data.get('hp')
         inventory = data.get('inventory')
+        role_level = data.get('role_level')
+
         try:
             char = Character.objects.get(id=char_id)
             char.skills = skills
@@ -82,6 +84,7 @@ def save_char(request):
             char.role = role
             char.hp = hp
             char.inventory = inventory
+            char.role_level = role_level
             char.save()
             return JsonResponse({'status': 'ok'})
         except Character.DoesNotExist:
@@ -90,10 +93,25 @@ def save_char(request):
 from django.http import JsonResponse
 from .models import Character
 
+    
+ROLE_TRANSLATIONS = {
+    'solo': 'Соло',
+    'netrunner': 'Нетраннер',
+    'techie': 'Техник',
+    'fixer': 'Фиксер',
+    'media': 'Медиа',
+    'lawman': 'Законник',
+    'corp': 'Корпорат',
+    'rocker': 'Рокербой',
+    'medtech': 'Медтех',
+    'nomad': 'Кочевник',
+}
+
 def get_char_skills(request, char_id):
     try:
         char = Character.objects.get(id=char_id)
         return JsonResponse({"status": "ok", "skills": char.skills, 'stats': char.stats, 'armor': char.armor,
-                             'name': char.name, 'role': char.role, 'hp': char.hp, 'inventory': char.inventory})
+                             'name': char.name, 'role_choice': ROLE_TRANSLATIONS.get(char.role, char.role), 'role': (char.role), 
+                             'hp': char.hp, 'inventory': char.inventory, 'role_level': char.role_level})
     except Character.DoesNotExist:
         return JsonResponse({"status": "error", "message": "Character not found"})

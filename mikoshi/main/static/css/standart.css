@@ -6,9 +6,15 @@ body {
 }
 
 h2 {
-    font-size: 2rem;
+    font-size: 5rem;
     border-bottom: 2px solid #e60000;
     margin-bottom: 1.5rem;
+}
+
+label { 
+    display: block;
+    font-size: 2rem;
+    width: 100%;
 }
 
 ul {
@@ -21,6 +27,8 @@ li {
 }
 
 a {
+    text-align: left;
+    font-size: 2rem;
     display: block;
     color: #e60000;
     text-decoration: none;
@@ -30,9 +38,41 @@ a {
     border-radius: 8px;
     transition: all 0.3s ease;
     box-shadow: 0 0 10px rgba(230, 0, 0, 0.3);
+    margin-top: 15px;
+    width: 300px;
 }
 
 a:hover {
+    background-color: #e60000;
+    color: #0d0d0d;
+    box-shadow: 0 0 15px #e60000;
+}
+
+input {
+    background-color: #0d0d0d;
+    color: white;
+    border-bottom: 2px solid red;
+    font-size: 2rem;
+    box-shadow: none;
+}
+
+button {
+    text-align: left;
+    font-size: 2rem;
+    display: block;
+    color: #e60000;
+    text-decoration: none;
+    background-color: rgba(230, 0, 0, 0.08);
+    padding: 1rem;
+    border: 1px solid #e60000;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(230, 0, 0, 0.3);
+    margin-top: 15px;
+    width: 300px;
+}
+
+button:hover {
     background-color: #e60000;
     color: #0d0d0d;
     box-shadow: 0 0 15px #e60000;
@@ -56,6 +96,45 @@ a:hover {
 }
 
 p {
-    color: #999;
+    color: #ffffff;
     margin-bottom: 1rem;
+}
+
+.roles {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.role-card {
+border: 2px solid #ffffff;
+padding: 10px;
+cursor: pointer;
+width: 100%;
+transition: 0.2s;
+}
+
+.role-card:hover {
+border-color: #333;
+background: #5a5a5a;
+}
+
+.role-card input {
+display: none;
+}
+
+.role-card input:checked + .card-content,
+.role-card:has(input:checked) {
+border-color: #b10808;
+background: #5a5a5a;
+}
+
+.card-content h3 {
+margin: 0 0 5px;
+}
+
+.card-content p {
+margin: 0;
+font-size: 14px;
 }

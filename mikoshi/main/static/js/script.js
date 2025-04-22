@@ -45,6 +45,7 @@ function saveSkills() {
   const name = document.querySelector('.name').value;
   const role = document.querySelector('.role').value;
   const hp = document.querySelector('.real_hp').value;
+  const role_level = document.querySelector('.role_level').value;
 
 
   fetch('/api/save-char/', {
@@ -60,7 +61,8 @@ function saveSkills() {
       name: name,
       role: role,
       hp: hp,
-      inventory, inventory,
+      inventory: inventory,
+      role_level: role_level
       
     })
   })
@@ -86,10 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Автоматический расчет значений
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".level, .mod, .stat, .armor, .name, .role, .real_hp, .item_name, .item_desc").forEach(input => {
+    document.querySelectorAll(".level, .mod, .stat, .armor, .name, .real_hp, .item_name, .item_desc, .role_level").forEach(input => {
       input.addEventListener("input", () => {
         updateSkillStats();
         saveSkills(); // автоматическое сохранение при любом изменении
+        showRoleDesc()
       });
     });
   });
@@ -107,7 +110,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const armor = data.armor;
         const name = data.name;
         const role = data.role;
+        const role_choice = data.role_choice;
         const hp = data.hp;
+        const role_level = data.role_level;
         
         // ИНВЕНТАРЬ
         loadInventory(data.inventory)
@@ -140,8 +145,14 @@ document.addEventListener("DOMContentLoaded", function () {
         if (nameInput) nameInput.value = name ?? '';
 
         // РОЛЬ
-        const roleInput = document.querySelector(`.role`);
-        if (roleInput) roleInput.value = role ?? '';
+        const hidden = document.getElementById('roleHiddenInput')
+        const roleInput = document.querySelector(`.role-choice`);
+        if (hidden) hidden.value = role ?? '';
+        if (roleInput) roleInput.value = role_choice ?? '';
+
+        const role_levelField = document.getElementById("role_level");
+        if (role_levelField) role_levelField.value = role_level ?? '';
+        showRoleDesc()
 
         // REAL HP
         const hpInput = document.querySelector(`.real_hp`);
@@ -157,3 +168,239 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// Загрузка описания роли
+function showRoleDesc() {
+  const role = document.querySelector('.role').value;
+  const rolelevel = parseInt(document.getElementById('role_level').value, 10) || 0;
+  const roleDescField = document.getElementById('role_desc')
+
+  if (role === 'rocker') {
+    if (rolelevel >= 1 && rolelevel <= 2) {
+      const desc = rockerLevels["1-2"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 3 && rolelevel <= 4) {
+      const desc = rockerLevels["3-4"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 5 && rolelevel <= 6) {
+      const desc = rockerLevels["5-6"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 7 && rolelevel <= 7) {
+      const desc = rockerLevels["7-8"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 9 && rolelevel <= 10) {
+      const desc = rockerLevels["9-10"];
+      roleDescField.innerHTML = desc
+    }
+  }
+
+  if (role === 'solo') {
+    if (rolelevel >= 1 && rolelevel <= 2) {
+      const desc = rockerLevels["1-2"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 3 && rolelevel <= 4) {
+      const desc = rockerLevels["3-4"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 5 && rolelevel <= 6) {
+      const desc = rockerLevels["5-6"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 7 && rolelevel <= 7) {
+      const desc = rockerLevels["7-8"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 9 && rolelevel <= 10) {
+      const desc = rockerLevels["9-10"];
+      roleDescField.innerHTML = desc
+    }
+  }
+
+  if (role === 'netrunner') {
+    if (rolelevel >= 1 && rolelevel <= 2) {
+      const desc = rockerLevels["1-2"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 3 && rolelevel <= 4) {
+      const desc = rockerLevels["3-4"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 5 && rolelevel <= 6) {
+      const desc = rockerLevels["5-6"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 7 && rolelevel <= 7) {
+      const desc = rockerLevels["7-8"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 9 && rolelevel <= 10) {
+      const desc = rockerLevels["9-10"];
+      roleDescField.innerHTML = desc
+    }
+  }
+
+  if (role === 'technie') {
+    if (rolelevel >= 1 && rolelevel <= 2) {
+      const desc = rockerLevels["1-2"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 3 && rolelevel <= 4) {
+      const desc = rockerLevels["3-4"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 5 && rolelevel <= 6) {
+      const desc = rockerLevels["5-6"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 7 && rolelevel <= 7) {
+      const desc = rockerLevels["7-8"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 9 && rolelevel <= 10) {
+      const desc = rockerLevels["9-10"];
+      roleDescField.innerHTML = desc
+    }
+  }
+
+  if (role === 'medtech') {
+    if (rolelevel >= 1 && rolelevel <= 2) {
+      const desc = rockerLevels["1-2"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 3 && rolelevel <= 4) {
+      const desc = rockerLevels["3-4"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 5 && rolelevel <= 6) {
+      const desc = rockerLevels["5-6"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 7 && rolelevel <= 7) {
+      const desc = rockerLevels["7-8"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 9 && rolelevel <= 10) {
+      const desc = rockerLevels["9-10"];
+      roleDescField.innerHTML = desc
+    }
+  }
+
+  if (role === 'media') {
+    if (rolelevel >= 1 && rolelevel <= 2) {
+      const desc = rockerLevels["1-2"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 3 && rolelevel <= 4) {
+      const desc = rockerLevels["3-4"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 5 && rolelevel <= 6) {
+      const desc = rockerLevels["5-6"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 7 && rolelevel <= 7) {
+      const desc = rockerLevels["7-8"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 9 && rolelevel <= 10) {
+      const desc = rockerLevels["9-10"];
+      roleDescField.innerHTML = desc
+    }
+  }
+
+  if (role === 'corporate') {
+    if (rolelevel >= 1 && rolelevel <= 2) {
+      const desc = rockerLevels["1-2"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 3 && rolelevel <= 4) {
+      const desc = rockerLevels["3-4"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 5 && rolelevel <= 6) {
+      const desc = rockerLevels["5-6"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 7 && rolelevel <= 7) {
+      const desc = rockerLevels["7-8"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 9 && rolelevel <= 10) {
+      const desc = rockerLevels["9-10"];
+      roleDescField.innerHTML = desc
+    }
+  }
+
+  if (role === 'lawman') {
+    if (rolelevel >= 1 && rolelevel <= 2) {
+      const desc = rockerLevels["1-2"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 3 && rolelevel <= 4) {
+      const desc = rockerLevels["3-4"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 5 && rolelevel <= 6) {
+      const desc = rockerLevels["5-6"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 7 && rolelevel <= 7) {
+      const desc = rockerLevels["7-8"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 9 && rolelevel <= 10) {
+      const desc = rockerLevels["9-10"];
+      roleDescField.innerHTML = desc
+    }
+  }
+
+  if (role === 'fixer') {
+    if (rolelevel >= 1 && rolelevel <= 2) {
+      const desc = rockerLevels["1-2"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 3 && rolelevel <= 4) {
+      const desc = rockerLevels["3-4"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 5 && rolelevel <= 6) {
+      const desc = rockerLevels["5-6"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 7 && rolelevel <= 7) {
+      const desc = rockerLevels["7-8"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 9 && rolelevel <= 10) {
+      const desc = rockerLevels["9-10"];
+      roleDescField.innerHTML = desc
+    }
+  }
+
+  if (role === 'nomad') {
+    if (rolelevel >= 1 && rolelevel <= 2) {
+      const desc = rockerLevels["1-2"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 3 && rolelevel <= 4) {
+      const desc = rockerLevels["3-4"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 5 && rolelevel <= 6) {
+      const desc = rockerLevels["5-6"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 7 && rolelevel <= 7) {
+      const desc = rockerLevels["7-8"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel >= 9 && rolelevel <= 10) {
+      const desc = rockerLevels["9-10"];
+      roleDescField.innerHTML = desc
+    }
+  }
+}
