@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function showRoleDesc() {
   const role = document.querySelector('.role').value;
   const rolelevel = parseInt(document.getElementById('role_level').value, 10) || 0;
-  const roleDescField = document.getElementById('solorole')
+  const roleDescField = document.getElementById('roleAbilities')
   roleDescField.innerHTML = ''
 
   if (role === 'rocker') {
@@ -237,8 +237,6 @@ function showRoleDesc() {
         <h4>▶ Обнаружение угроз: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
         <p class="effect-text">Нет бонуса</p>
       </div>
-    
-      <!-- Добавь другие способности по аналогии -->
     </div>
     `
     const availablePointsSpan = document.getElementById('availablePoints');
@@ -301,7 +299,7 @@ function showRoleDesc() {
           break;
         case "percept":
           if (points > 0) el.textContent = `+${points} к внимательности`;
-          else el.textContent = `Нет бонуса`;
+          else el.textContent = `Нет бонуса`; 
           break;
         // Добавь остальные способности аналогично
       }
@@ -309,162 +307,391 @@ function showRoleDesc() {
   }
 
   if (role === 'netrunner') {
-    if (rolelevel >= 1 && rolelevel <= 2) {
-      const desc = rockerLevels["1-2"];
+    if (rolelevel >= 1 && rolelevel <= 3) {
+      const desc = netrunnerLevels["1-3"];
       roleDescField.innerHTML = desc
     }
-    if (rolelevel >= 3 && rolelevel <= 4) {
-      const desc = rockerLevels["3-4"];
+    if (rolelevel >= 4 && rolelevel <= 6) {
+      const desc = netrunnerLevels["4-6"];
       roleDescField.innerHTML = desc
     }
-    if (rolelevel >= 5 && rolelevel <= 6) {
-      const desc = rockerLevels["5-6"];
+    if (rolelevel >= 7 && rolelevel <= 9) {
+      const desc = netrunnerLevels["7-9"];
       roleDescField.innerHTML = desc
     }
-    if (rolelevel >= 7 && rolelevel <= 7) {
-      const desc = rockerLevels["7-8"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 9 && rolelevel <= 10) {
-      const desc = rockerLevels["9-10"];
+    if (rolelevel === 10) {
+      const desc = netrunnerLevels["10"];
       roleDescField.innerHTML = desc
     }
   }
 
-  if (role === 'technie') {
-    if (rolelevel >= 1 && rolelevel <= 2) {
-      const desc = rockerLevels["1-2"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 3 && rolelevel <= 4) {
-      const desc = rockerLevels["3-4"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 5 && rolelevel <= 6) {
-      const desc = rockerLevels["5-6"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 7 && rolelevel <= 7) {
-      const desc = rockerLevels["7-8"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 9 && rolelevel <= 10) {
-      const desc = rockerLevels["9-10"];
-      roleDescField.innerHTML = desc
+  if (role === 'techie') {
+    roleDescField.innerHTML = `
+      <div id=technieoAbilities">
+      <h3>Создатель</h3>
+      <p>Доступно очков: <span id="availablePoints"></span></p>
+    
+      <div class="ability-block" data-ability="expert">
+        <h4>▶ Полевая экспертиза: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
+        <p class="effect-text">Нет бонуса</p>
+      </div>
+    
+      <div class="ability-block" data-ability="modif">
+        <h4>▶ Мастер модернизации: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
+        <p class="effect-text">Нет бонуса</p>
+      </div>
+    
+      <div class="ability-block" data-ability="make">
+        <h4>▶ Мастер изготовления: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
+        <p class="effect-text">Нет бонуса</p>
+      </div>
+
+      <div class="ability-block" data-ability="invent">
+        <h4>▶ Мастер изобретатель: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
+        <p class="effect-text">Нет бонуса</p>
+      </div>
+    </div>
+    `
+    const availablePointsSpan = document.getElementById('availablePoints');
+    let maxPoints = rolelevel * 2;
+    availablePointsSpan.textContent = maxPoints;
+
+    document.querySelectorAll(".ability-block").forEach(block => {
+      const plus = block.querySelector(".plus");
+      const minus = block.querySelector(".minus");
+      const pointsSpan = block.querySelector(".points");
+      const effectText = block.querySelector(".effect-text");
+
+      plus.addEventListener("click", () => {
+        let current = parseInt(pointsSpan.textContent);
+        if (maxPoints > 0) {
+          current++;
+          maxPoints--;
+          pointsSpan.textContent = current;
+          updateEffect(block.dataset.ability, current, effectText);
+        }
+        availablePointsSpan.textContent = maxPoints;
+      });
+
+      minus.addEventListener("click", () => {
+        let current = parseInt(pointsSpan.textContent);
+        if (current > 0) {
+          current--;
+          maxPoints++;
+          pointsSpan.textContent = current;
+          updateEffect(block.dataset.ability, current, effectText);
+        }
+        availablePointsSpan.textContent = maxPoints;
+      });
+    });
+
+    function updateEffect(ability, points, el) {
+      switch (ability) {
+        case "expert":
+          if (points > 0) el.textContent = `+ ${points} к навыкам: Техника, Кибертехника, Системы безопасности, Оружейник, Наземная, Морская или Авиатехника`;
+          else el.textContent = `Нет бонуса`;
+          break;
+        case "modif":
+          if (points > 0) el.textContent = `Модернизация делается СТАТ ТЕХ + ТЕХ Навык, которым ремонтируется предмет + Ранг мастера модернизации (+${points}) + 1d10`;
+          else el.textContent = `Нет бонуса`;
+          break;
+        case "make":
+          if (points > 0) el.textContent = `Чтобы изготовить предмет, делается бросок СТАТ ТЕХ + навык ТЕХ, которым ремонтируется предмет + ранг Мастера изготовления (${points}) + 1d10`;
+          else el.textContent = `Нет бонуса`;
+          break;
+        case "invent":
+          if (points > 0) el.textContent = `Для изобретения ТЕХ + навык ТЕХ, связанный с ремонтом изобретения или предмета, который изобретение должно улучшить + ранг Мастера Изобретателя (${points}) + 1d10`;
+          else el.textContent = `Нет бонуса`;
+          break;
+      }
     }
   }
 
   if (role === 'medtech') {
-    if (rolelevel >= 1 && rolelevel <= 2) {
-      const desc = rockerLevels["1-2"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 3 && rolelevel <= 4) {
-      const desc = rockerLevels["3-4"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 5 && rolelevel <= 6) {
-      const desc = rockerLevels["5-6"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 7 && rolelevel <= 7) {
-      const desc = rockerLevels["7-8"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 9 && rolelevel <= 10) {
-      const desc = rockerLevels["9-10"];
-      roleDescField.innerHTML = desc
-    }
+    roleDescField.innerHTML = `
+      <div id="medtechAbilities">
+      <h3>Создатель</h3>
+      <p>Доступно очков: <span id="availablePoints"></span></p>
+    
+      <div class="ability-block" data-ability="surgeon">
+        <h4>▶ Хирургия: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
+        <p class="effect-text">Нет бонуса</p>
+      </div>
+    
+      <div class="ability-block" data-ability="pharm">
+        <h4>▶ Фармацевтика: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
+        <p class="effect-text">Нет бонуса</p>
+
+
+      <div class="drug-selection" style="display: none;">
+        <label>Выберите препарат:</label><br>
+        <select style='display: none' class="drug-dropdown">
+          <option value="">—</option>
+          <option value="antibiotics">Антибиотики</option>
+          <option value="detox">Быстрый детокс</option>
+          <option value="speedheal">СпидХил</option>
+          <option value="stim">Стим</option>
+          <option value="vpsk">Всплеск</option>
+        </select>
+        <p class="drug-effect"></p>
+        </div>
+      </div>
+    
+      <div class="ability-block" data-ability="cryosystem">
+        <h4>▶ Криосистемы: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
+        <p class="effect-text">Нет бонуса</p>
+      </div>
+    </div>
+    `
+    const availablePointsSpan = document.getElementById('availablePoints');
+    let maxPoints = rolelevel;
+    availablePointsSpan.textContent = maxPoints;
+
+    document.querySelectorAll(".ability-block").forEach(block => {
+      const plus = block.querySelector(".plus");
+      const minus = block.querySelector(".minus");
+      const pointsSpan = block.querySelector(".points");
+      const effectText = block.querySelector(".effect-text");
+
+      plus.addEventListener("click", () => {
+        let current = parseInt(pointsSpan.textContent);
+        if (maxPoints > 0) {
+          current++;
+          maxPoints--;
+          pointsSpan.textContent = current;
+          updateEffect(block.dataset.ability, current, effectText);
+        }
+        availablePointsSpan.textContent = maxPoints;
+      });
+
+      minus.addEventListener("click", () => {
+        let current = parseInt(pointsSpan.textContent);
+        if (current > 0) {
+          current--;
+          maxPoints++;
+          pointsSpan.textContent = current;
+          updateEffect(block.dataset.ability, current, effectText);
+        }
+        availablePointsSpan.textContent = maxPoints;
+      });
+    });
+
+function updateEffect(ability, points, el) {
+  switch (ability) {
+    
+    case "surgeon":
+      if (points > 0) el.textContent = `+ ${points} к навыку Хирургия`;
+      else el.textContent = `Нет бонуса`;
+      break;
+
+    case "pharm":
+      const drugBlock = el.parentElement.querySelector(".drug-selection");
+      const drugEffect = drugBlock.querySelector(".drug-effect");
+      const dropdown = drugBlock.querySelector(".drug-dropdown");
+      
+      // Обновляем текстовый эффект для фармацевтики
+      if (points > 0) {
+        el.textContent = `+ ${points} к навыку Медицинские технологии`;
+        drugBlock.style.display = "block";
+        
+        // Ограничиваем количество доступных препаратов количеством очков
+        const availableOptions = [
+          "antibiotics",
+          "detox",
+          "speedheal",
+          "stim",
+          "vpsk"
+        ];
+        
+        // Очищаем все старые формы
+        let formContainer = drugBlock.querySelector(".form-container");
+        if (!formContainer) {
+          formContainer = document.createElement("div");
+          formContainer.classList.add("form-container");
+          drugBlock.appendChild(formContainer);
+        } else {
+          formContainer.innerHTML = ''; // Очистить старые формы
+        }
+        
+        // Добавляем нужное количество форм
+        for (let i = 0; i < points; i++) {
+          const form = document.createElement("div");
+          form.classList.add("drug-form");
+
+          // Создаём выпадающий список для каждого препарата
+          const select = document.createElement("select");
+          select.classList.add("drug-dropdown");
+          const optionEmpty = document.createElement("option");
+          optionEmpty.value = "";
+          optionEmpty.textContent = "—";
+          select.appendChild(optionEmpty);
+
+          availableOptions.slice(0, 5).forEach(option => {
+            const optionElement = document.createElement("option");
+            optionElement.value = option;
+            optionElement.textContent = getDrugName(option);
+            select.appendChild(optionElement);
+          });
+
+          const effectText = document.createElement("p");
+          effectText.classList.add("drug-effect");
+          effectText.textContent = "";
+
+          form.appendChild(select);
+          form.appendChild(effectText);
+          formContainer.appendChild(form);
+
+          // Обновляем эффект при изменении выбора препарата
+          select.onchange = () => {
+            const selectedValue = select.value;
+            effectText.textContent = getDrugEffect(selectedValue);
+          };
+        }
+      } else {
+        el.textContent = "Нет бонуса";
+        drugBlock.style.display = "none";
+      }
+      break;
+
+    case "cryosystem":
+      if (points == 1) el.textContent = `Вы получаете крионасос`;
+      else if (points === 2) el.textContent = `Вы получаете 24/7 доступ к 1 Криокамере одновременно в любом хранилище, управляемом медицинскими корпорациями или государственными учреждениями`;
+      else if (points === 3) el.textContent = `Вы получаете 1 Криокамеру, установленную в любом помещении на ваш выбор`;
+      else if (points === 4) el.textContent = `Вы получаете еще 2 Криокамеры, которые можно поместить там же, где и первая. Ваш Крионасос теперь имеет 2 заряда, максимальная грузоподъемность криопакета увеличивается до 2х человек в стазисе.`;
+      else if (points === 5) el.textContent = `Вы получаете еще 3 Криокамеры, которые можно поместить там же, где и первые три. Ваш Крионасос теперь имеет 3 заряда, максимальная грузоподъемность криопакета увеличивается до 3х человек в стазисе`;
+      else el.textContent = `Нет бонуса`;
+      break;
   }
+}
+
+// Функция для получения названия препарата
+function getDrugName(value) {
+  const drugNames = {
+    "antibiotics": "Антибиотики",
+    "detox": "Быстрый детокс",
+    "speedheal": "СпидХил",
+    "stim": "Стим",
+    "vpsk": "Всплеск"
+  };
+  return drugNames[value] || '';
+}
+
+// Функция для получения эффекта препарата
+function getDrugEffect(value) {
+  const drugEffects = {
+    "antibiotics": "Дополнительно восстанавливаются 2 ПЗ в день в течение недели. Один раз в день.",
+    "detox": "Мгновенно очищает от наркотиков, ядов и интоксикации.",
+    "speedheal": "Мгновенно восстанавливает ПЗ = ТЕЛ + ВОЛЯ. Один раз в день.",
+    "stim": "Игнорирование штрафов тяжелого ранения на 1 час. Один раз в день.",
+    "vpsk": "Бодрствование без сна на 24 часа. Один раз в неделю."
+  };
+  return drugEffects[value] || '';
+}
+}
 
   if (role === 'media') {
     if (rolelevel >= 1 && rolelevel <= 2) {
-      const desc = rockerLevels["1-2"];
+      const desc = mediaLevels["1-2"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 3 && rolelevel <= 4) {
-      const desc = rockerLevels["3-4"];
+      const desc = mediaLevels["3-4"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 5 && rolelevel <= 6) {
-      const desc = rockerLevels["5-6"];
+      const desc = mediaLevels["5-6"];
       roleDescField.innerHTML = desc
     }
-    if (rolelevel >= 7 && rolelevel <= 7) {
-      const desc = rockerLevels["7-8"];
+    if (rolelevel >= 7 && rolelevel <= 8) {
+      const desc = mediaLevels["7-8"];
       roleDescField.innerHTML = desc
     }
-    if (rolelevel >= 9 && rolelevel <= 10) {
-      const desc = rockerLevels["9-10"];
+    if (rolelevel === 9) {
+      const desc = mediaLevels["9"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel === 10) {
+      const desc = mediaLevels["10"];
       roleDescField.innerHTML = desc
     }
   }
 
+  // В РАЗРАБОТКЕ
   if (role === 'corporate') {
-    if (rolelevel >= 1 && rolelevel <= 2) {
-      const desc = rockerLevels["1-2"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 3 && rolelevel <= 4) {
-      const desc = rockerLevels["3-4"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 5 && rolelevel <= 6) {
-      const desc = rockerLevels["5-6"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 7 && rolelevel <= 7) {
-      const desc = rockerLevels["7-8"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 9 && rolelevel <= 10) {
-      const desc = rockerLevels["9-10"];
-      roleDescField.innerHTML = desc
-    }
+    roleDescField.innerHTML = '<b>В РАЗРАБОТКЕ</b>'
+
+    // if (rolelevel >= 1 && rolelevel <= 2) {
+    //   const desc = rockerLevels["1-2"];
+    //   roleDescField.innerHTML = desc
+    // }
+    // if (rolelevel >= 3 && rolelevel <= 4) {
+    //   const desc = rockerLevels["3-4"];
+    //   roleDescField.innerHTML = desc
+    // }
+    // if (rolelevel >= 5 && rolelevel <= 6) {
+    //   const desc = rockerLevels["5-6"];
+    //   roleDescField.innerHTML = desc
+    // }
+    // if (rolelevel >= 7 && rolelevel <= 7) {
+    //   const desc = rockerLevels["7-8"];
+    //   roleDescField.innerHTML = desc
+    // }
+    // if (rolelevel >= 9 && rolelevel <= 10) {
+    //   const desc = rockerLevels["9-10"];
+    //   roleDescField.innerHTML = desc
+    // }
   }
 
   if (role === 'lawman') {
     if (rolelevel >= 1 && rolelevel <= 2) {
-      const desc = rockerLevels["1-2"];
+      const desc = lawmanLevels["1-2"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 3 && rolelevel <= 4) {
-      const desc = rockerLevels["3-4"];
+      const desc = lawmanLevels["3-4"];
       roleDescField.innerHTML = desc
     }
-    if (rolelevel >= 5 && rolelevel <= 6) {
-      const desc = rockerLevels["5-6"];
+    if (rolelevel >= 5 && rolelevel <= 7) {
+      const desc = lawmanLevels["5-7"];
       roleDescField.innerHTML = desc
     }
-    if (rolelevel >= 7 && rolelevel <= 7) {
-      const desc = rockerLevels["7-8"];
+    if (rolelevel === 8) {
+      const desc = lawmanLevels["8"];
       roleDescField.innerHTML = desc
     }
-    if (rolelevel >= 9 && rolelevel <= 10) {
-      const desc = rockerLevels["9-10"];
+    if (rolelevel === 9) {
+      const desc = lawmanLevels["9"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel === 10) {
+      const desc = lawmanLevels["10"];
       roleDescField.innerHTML = desc
     }
   }
 
   if (role === 'fixer') {
     if (rolelevel >= 1 && rolelevel <= 2) {
-      const desc = rockerLevels["1-2"];
+      const desc = fixerLevels["1-2"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 3 && rolelevel <= 4) {
-      const desc = rockerLevels["3-4"];
+      const desc = fixerLevels["3-4"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 5 && rolelevel <= 6) {
-      const desc = rockerLevels["5-6"];
+      const desc = fixerLevels["5-6"];
       roleDescField.innerHTML = desc
     }
-    if (rolelevel >= 7 && rolelevel <= 7) {
-      const desc = rockerLevels["7-8"];
+    if (rolelevel >= 7 && rolelevel <= 8) {
+      const desc = fixerLevels["7-8"];
       roleDescField.innerHTML = desc
     }
-    if (rolelevel >= 9 && rolelevel <= 10) {
-      const desc = rockerLevels["9-10"];
+    if (rolelevel === 9) {
+      const desc = fixerLevels["9"];
+      roleDescField.innerHTML = desc
+    }
+    if (rolelevel === 10) {
+      const desc = fixerLevels["10"];
       roleDescField.innerHTML = desc
     }
   }
