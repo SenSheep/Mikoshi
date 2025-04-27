@@ -12,3 +12,4 @@ class Character(models.Model):
     inventory = models.JSONField(default=dict)
     created_at = models.DateTimeField(auto_now_add=True)
     role_level = models.IntegerField(default=1)
+    ability = models.JSONField(default=dict, blank=True, null=True)

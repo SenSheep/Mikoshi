@@ -35,46 +35,6 @@ function updateSkillStats() {
 }) 
 }
 
-// СОХРАНЕНИЕ ДАННЫХ
-function saveSkills() {
-  const charId = document.body.dataset.charId;
-  const skillsData = collectSkills() || 0;
-  const statsData = collectStats();
-  const armorData = collectArmor();
-  const inventory = collectInventory();
-  const name = document.querySelector('.name').value;
-  const role = document.querySelector('.role').value;
-  const hp = document.querySelector('.real_hp').value;
-  const role_level = document.querySelector('.role_level').value;
-
-
-  fetch('/api/save-char/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      char_id: charId,  // ID персонажа
-      skills: skillsData,
-      stats: statsData,
-      armor: armorData,
-      name: name,
-      role: role,
-      hp: hp,
-      inventory: inventory,
-      role_level: role_level
-      
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.status === 'ok') {
-    } else {
-      alert("Error: " + data.message);
-    }
-  });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   const table = document.getElementById('inventory_table');
 
@@ -97,76 +57,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-// начальное отображение сохраненный данных
-document.addEventListener("DOMContentLoaded", function () {
-  const charId = document.body.dataset.charId;
-
-  fetch(`/api/get-char-skills/${charId}/`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "ok") {
-        const skills = data.skills;
-        const stats = data.stats;
-        const armor = data.armor;
-        const name = data.name;
-        const role = data.role;
-        const role_choice = data.role_choice;
-        const hp = data.hp;
-        const role_level = data.role_level;
-        
-        // ИНВЕНТАРЬ
-        loadInventory(data.inventory)
-
-        // СТАТЫ
-        for (const [statName, value1] of Object.entries(stats)) {
-          const statInput = document.querySelector(`.stat[data-stat="${statName}"]`);
-
-          if (statInput) statInput.value = value1 ?? 0;
-        }
-
-        // СКИЛЛЫ
-        for (const [skillName, values2] of Object.entries(skills)) {
-          const levelInput = document.querySelector(`.level[data-skill="${skillName}"]`);
-          const modInput = document.querySelector(`.mod[data-skill="${skillName}"]`);
-
-          if (levelInput) levelInput.value = values2.level ?? 0;
-          if (modInput) modInput.value = values2.mod ?? 0;
-        }
-
-        // БРОНЯ
-        for (const [armorName, value3] of Object.entries(armor)) {
-          const armorInput = document.querySelector(`.armor[data-armor="${armorName}"]`);
-
-          if (armorInput) armorInput.value = value3 ?? 0;
-        }
-        
-        // ИМЯ
-        const nameInput = document.querySelector(`.name`);
-        if (nameInput) nameInput.value = name ?? '';
-
-        // РОЛЬ
-        const hidden = document.getElementById('roleHiddenInput')
-        const roleInput = document.querySelector(`.role-choice`);
-        if (hidden) hidden.value = role ?? '';
-        if (roleInput) roleInput.value = role_choice ?? '';
-
-        const role_levelField = document.getElementById("role_level");
-        if (role_levelField) role_levelField.value = role_level ?? '';
-        showRoleDesc()
-
-        // REAL HP
-        const hpInput = document.querySelector(`.real_hp`);
-        if (hpInput) hpInput.value = hp ?? 0;
-
-      } else {
-        console.error("Не удалось загрузить навыки:", data.message);
-      }
-      updateSkillStats()
-    })
-    .catch(err => {
-      console.error("Ошибка запроса:", err);
-    });
-});
+let PointsState = {};
+function updatePoints(ability, value) {
+  PointsState[ability] = value;
+  return PointsState; // Возвращаем текущее состояние
+}
 
 // Загрузка описания роли
 function showRoleDesc() {
@@ -355,12 +250,14 @@ function showRoleDesc() {
     const availablePointsSpan = document.getElementById('availablePoints');
     let maxPoints = rolelevel * 2;
     availablePointsSpan.textContent = maxPoints;
+    const charId = document.body.dataset.charId;
 
     document.querySelectorAll(".ability-block").forEach(block => {
       const plus = block.querySelector(".plus");
       const minus = block.querySelector(".minus");
       const pointsSpan = block.querySelector(".points");
       const effectText = block.querySelector(".effect-text");
+      const ability = block.dataset.ability;
 
       plus.addEventListener("click", () => {
         let current = parseInt(pointsSpan.textContent);
@@ -368,7 +265,9 @@ function showRoleDesc() {
           current++;
           maxPoints--;
           pointsSpan.textContent = current;
+          updatePoints(ability, current);
           updateEffect(block.dataset.ability, current, effectText);
+          saveSkills()
         }
         availablePointsSpan.textContent = maxPoints;
       });
@@ -379,7 +278,9 @@ function showRoleDesc() {
           current--;
           maxPoints++;
           pointsSpan.textContent = current;
+          updatePoints(ability, current);
           updateEffect(block.dataset.ability, current, effectText);
+          saveSkills()
         }
         availablePointsSpan.textContent = maxPoints;
       });
@@ -405,6 +306,26 @@ function showRoleDesc() {
           break;
       }
     }
+
+    fetch(`/api/get-char-skills/${charId}/`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "ok") {
+        const ability = data.ability || {};
+  
+        // Для каждого блока ability-block
+        document.querySelectorAll(".ability-block").forEach(block => {
+          const abilityName = block.dataset.ability; // Получаем имя способности из data-ability
+          const points = ability[abilityName] || 0; // Получаем количество очков из data.ability
+          const plusButton = block.querySelector(".plus"); // Кнопка "plus"
+  
+          // Нажимаем кнопку "plus" нужное количество раз
+          for (let i = 0; i < points; i++) {
+            plusButton.click();
+          }
+        });
+      }
+    })
   }
 
   if (role === 'medtech') {
@@ -446,12 +367,14 @@ function showRoleDesc() {
     const availablePointsSpan = document.getElementById('availablePoints');
     let maxPoints = rolelevel;
     availablePointsSpan.textContent = maxPoints;
+    const charId = document.body.dataset.charId;
 
     document.querySelectorAll(".ability-block").forEach(block => {
       const plus = block.querySelector(".plus");
       const minus = block.querySelector(".minus");
       const pointsSpan = block.querySelector(".points");
       const effectText = block.querySelector(".effect-text");
+      const ability = block.dataset.ability;
 
       plus.addEventListener("click", () => {
         let current = parseInt(pointsSpan.textContent);
@@ -459,7 +382,9 @@ function showRoleDesc() {
           current++;
           maxPoints--;
           pointsSpan.textContent = current;
+          updatePoints(ability, current);
           updateEffect(block.dataset.ability, current, effectText);
+          saveSkills()
         }
         availablePointsSpan.textContent = maxPoints;
       });
@@ -470,7 +395,9 @@ function showRoleDesc() {
           current--;
           maxPoints++;
           pointsSpan.textContent = current;
+          updatePoints(ability, current);
           updateEffect(block.dataset.ability, current, effectText);
+          saveSkills()
         }
         availablePointsSpan.textContent = maxPoints;
       });
@@ -587,6 +514,26 @@ function getDrugEffect(value) {
   };
   return drugEffects[value] || '';
 }
+
+fetch(`/api/get-char-skills/${charId}/`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "ok") {
+        const ability = data.ability || {};
+  
+        // Для каждого блока ability-block
+        document.querySelectorAll(".ability-block").forEach(block => {
+          const abilityName = block.dataset.ability; // Получаем имя способности из data-ability
+          const points = ability[abilityName] || 0; // Получаем количество очков из data.ability
+          const plusButton = block.querySelector(".plus"); // Кнопка "plus"
+  
+          // Нажимаем кнопку "plus" нужное количество раз
+          for (let i = 0; i < points; i++) {
+            plusButton.click();
+          }
+        });
+      }
+    })
 }
 
   if (role === 'media') {
@@ -696,26 +643,119 @@ function getDrugEffect(value) {
     }
   }
 
+    // В РАЗРАБОТКЕ
   if (role === 'nomad') {
-    if (rolelevel >= 1 && rolelevel <= 2) {
-      const desc = rockerLevels["1-2"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 3 && rolelevel <= 4) {
-      const desc = rockerLevels["3-4"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 5 && rolelevel <= 6) {
-      const desc = rockerLevels["5-6"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 7 && rolelevel <= 7) {
-      const desc = rockerLevels["7-8"];
-      roleDescField.innerHTML = desc
-    }
-    if (rolelevel >= 9 && rolelevel <= 10) {
-      const desc = rockerLevels["9-10"];
-      roleDescField.innerHTML = desc
-    }
   }
 }
+
+// СОХРАНЕНИЕ ДАННЫХ
+function saveSkills() {
+  const charId = document.body.dataset.charId;
+  const skillsData = collectSkills() || 0;
+  const statsData = collectStats();
+  const armorData = collectArmor();
+  const inventory = collectInventory();
+  const name = document.querySelector('.name').value;
+  const role = document.querySelector('.role').value;
+  const hp = document.querySelector('.real_hp').value;
+  const role_level = document.querySelector('.role_level').value;
+  const ability = updatePoints(); // collectMedtechPoints() || 0;
+
+
+  fetch('/api/save-char/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      char_id: charId,  // ID персонажа
+      skills: skillsData,
+      stats: statsData,
+      armor: armorData,
+      name: name,
+      role: role,
+      hp: hp,
+      inventory: inventory,
+      role_level: role_level,
+      ability: ability,
+      
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'ok') {
+    } else {
+      alert("Error: " + data.message);
+    }
+  });
+}
+
+// начальное отображение сохраненный данных
+document.addEventListener("DOMContentLoaded", function () {
+  const charId = document.body.dataset.charId;
+
+  fetch(`/api/get-char-skills/${charId}/`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "ok") {
+        const skills = data.skills;
+        const stats = data.stats;
+        const armor = data.armor;
+        const name = data.name;
+        const role = data.role;
+        const role_choice = data.role_choice;
+        const hp = data.hp;
+        const role_level = data.role_level;        
+        // ИНВЕНТАРЬ
+        loadInventory(data.inventory)
+
+        // СТАТЫ
+        for (const [statName, value1] of Object.entries(stats)) {
+          const statInput = document.querySelector(`.stat[data-stat="${statName}"]`);
+
+          if (statInput) statInput.value = value1 ?? 0;
+        }
+
+        // СКИЛЛЫ
+        for (const [skillName, values2] of Object.entries(skills)) {
+          const levelInput = document.querySelector(`.level[data-skill="${skillName}"]`);
+          const modInput = document.querySelector(`.mod[data-skill="${skillName}"]`);
+
+          if (levelInput) levelInput.value = values2.level ?? 0;
+          if (modInput) modInput.value = values2.mod ?? 0;
+        }
+
+        // БРОНЯ
+        for (const [armorName, value3] of Object.entries(armor)) {
+          const armorInput = document.querySelector(`.armor[data-armor="${armorName}"]`);
+
+          if (armorInput) armorInput.value = value3 ?? 0;
+        }
+        
+        // ИМЯ
+        const nameInput = document.querySelector(`.name`);
+        if (nameInput) nameInput.value = name ?? '';
+
+        // РОЛЬ
+        const hidden = document.getElementById('roleHiddenInput')
+        const roleInput = document.querySelector(`.role-choice`);
+        if (hidden) hidden.value = role ?? '';
+        if (roleInput) roleInput.value = role_choice ?? '';
+
+        const role_levelField = document.getElementById("role_level");
+        if (role_levelField) role_levelField.value = role_level ?? '';
+        showRoleDesc()
+
+        // REAL HP
+        const hpInput = document.querySelector(`.real_hp`);
+        if (hpInput) hpInput.value = hp ?? 0;
+
+      } else {
+        console.error("Не удалось загрузить навыки:", data.message);
+      }
+      updateSkillStats()
+    })
+    .catch(err => {
+      console.error("Ошибка запроса:", err);
+    });
+});
