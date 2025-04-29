@@ -24,6 +24,36 @@ function collectStats() {
     });
     return statMap;
 }
+
+function collectPoints() {
+  const statPoints = {}
+  document.querySelectorAll(".ability-block").forEach(block => {
+    const ability = block.dataset.ability;
+    const pointsSpan = block.querySelector(".points");
+    statPoints[ability] = parseInt(pointsSpan.innerText || "0", 10);
+  });
+  return statPoints;
+};
+
+function collectDrugs() {
+  const drugSelections = [];
+  const drugForms = document.querySelectorAll(".drug-form");
+
+
+  drugForms.forEach(form => {
+    const select = form.querySelector(".drug-dropdown");
+    const selectedDrug = select.value;
+    drugSelections.push(selectedDrug);
+  });
+  return drugSelections;
+}
+
+function collectPointsPlusDrugs() {
+  const skillsData = collectPoints();  // вызываешь updatePoints(), если нужно
+  const collectedDrugs = collectDrugs();
+  skillsData['drugs'] = collectedDrugs;
+  return skillsData;
+}
   
 function collectArmor() {
     const armorMap = {};

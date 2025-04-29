@@ -1,14 +1,11 @@
+// ПРАВИЛЬНОЕ ОТОБРАЖЕНИЕ СТАТОВ
 function updateSkillStats() {
   const statInputs = document.querySelectorAll('.stat');
-  const statMap = {};
 
   // Собираем значения всех статов в объект
-  statInputs.forEach(input => {
-    const key = input.dataset.stat; // например, "int"
-    statMap[key] = parseInt(input.value || 0, 10);
-  });
+  const statMap = collectStats();
 
-  // Получаем максимальное hp
+  // Высчитываем максимальное hp
   let sbody = statMap['body']
   let swill = statMap['will'] 
   let max_hp = 10 + (5 * Math.ceil((swill + sbody) /2))
@@ -35,33 +32,41 @@ function updateSkillStats() {
 }) 
 }
 
+// СОХРАНЕНИЕ ПРИ ИЗМЕНЕНИИ ПОЛЕЙ В ИНВЕНТАРЕ
 document.addEventListener('DOMContentLoaded', () => {
   const table = document.getElementById('inventory_table');
 
   table.addEventListener('focusout', (event) => {
     const target = event.target;
     if (target.classList.contains('item_name') || target.classList.contains('item_desc')) {
-      saveSkills();  // или saveInventory()
+      saveSkills();
     }
   });
 });
 
-// Автоматический расчет значений
+// АВТОМАТИЧЕСКОЕ СОХРАНЕНИЕ ПРИ ИЗМЕНЕНИИ ПОЛЕЙ
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".level, .mod, .stat, .armor, .name, .real_hp, .item_name, .item_desc, .role_level").forEach(input => {
+  // Обработчики для полей ввода
+  document.querySelectorAll(".level, .mod, .stat, .armor, .name, .real_hp, .role_level")
+    .forEach(input => {
       input.addEventListener("input", () => {
         updateSkillStats();
-        saveSkills(); // автоматическое сохранение при любом изменении
-        showRoleDesc()
+        saveSkills();
+        showRoleDesc();
       });
     });
-  });
 
-let PointsState = {};
-function updatePoints(ability, value) {
-  PointsState[ability] = value;
-  return PointsState; // Возвращаем текущее состояние
-}
+  // Обработчик для выбора препарата (если он есть)
+  const select = document.getElementById("drugDropdown");
+  if (select) {
+    select.addEventListener("change", () => {
+      saveSkills();
+    });
+  }
+});
+
+
+
 
 // Загрузка описания роли
 function showRoleDesc() {
@@ -265,9 +270,8 @@ function showRoleDesc() {
           current++;
           maxPoints--;
           pointsSpan.textContent = current;
-          updatePoints(ability, current);
           updateEffect(block.dataset.ability, current, effectText);
-          saveSkills()
+          saveSkills();
         }
         availablePointsSpan.textContent = maxPoints;
       });
@@ -278,7 +282,6 @@ function showRoleDesc() {
           current--;
           maxPoints++;
           pointsSpan.textContent = current;
-          updatePoints(ability, current);
           updateEffect(block.dataset.ability, current, effectText);
           saveSkills()
         }
@@ -342,9 +345,7 @@ function showRoleDesc() {
       <div class="ability-block" data-ability="pharm">
         <h4>▶ Фармацевтика: <span class="points">0</span> <button class="minus">-</button> <button class="plus">+</button></h4>
         <p class="effect-text">Нет бонуса</p>
-
-
-      <div class="drug-selection" style="display: none;">
+        <div class="drug-selection" style="display: none;">
         <label>Выберите препарат:</label><br>
         <select style='display: none' class="drug-dropdown">
           <option value="">—</option>
@@ -354,8 +355,7 @@ function showRoleDesc() {
           <option value="stim">Стим</option>
           <option value="vpsk">Всплеск</option>
         </select>
-        <p class="drug-effect"></p>
-        </div>
+      </div>
       </div>
     
       <div class="ability-block" data-ability="cryosystem">
@@ -363,6 +363,8 @@ function showRoleDesc() {
         <p class="effect-text">Нет бонуса</p>
       </div>
     </div>
+
+    <button onclick="saveSkills()">TEST BUTTON</button>
     `
     const availablePointsSpan = document.getElementById('availablePoints');
     let maxPoints = rolelevel;
@@ -382,7 +384,7 @@ function showRoleDesc() {
           current++;
           maxPoints--;
           pointsSpan.textContent = current;
-          updatePoints(ability, current);
+          collectPoints(ability, current);
           updateEffect(block.dataset.ability, current, effectText);
           saveSkills()
         }
@@ -395,7 +397,7 @@ function showRoleDesc() {
           current--;
           maxPoints++;
           pointsSpan.textContent = current;
-          updatePoints(ability, current);
+          collectPoints(ability, current);
           updateEffect(block.dataset.ability, current, effectText);
           saveSkills()
         }
@@ -472,6 +474,7 @@ function updateEffect(ability, points, el) {
           select.onchange = () => {
             const selectedValue = select.value;
             effectText.textContent = getDrugEffect(selectedValue);
+            saveSkills();
           };
         }
       } else {
@@ -490,6 +493,48 @@ function updateEffect(ability, points, el) {
       break;
   }
 }
+
+  fetch(`/api/get-char-skills/${charId}/`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "ok") {
+        const ability = data.ability || {};
+        const drugs = ability["drugs"] || [];
+
+        document.querySelectorAll(".ability-block").forEach(block => {
+          const abilityName = block.dataset.ability;
+          const points = ability[abilityName] || 0;
+
+          const pointsSpan = block.querySelector(".points");
+          const effectText = block.querySelector(".effect-text");
+
+          pointsSpan.textContent = points;
+          collectPoints(abilityName, points);
+          updateEffect(abilityName, points, effectText);
+        });
+
+        // После отрисовки препаратов — вставим значения
+        if ((ability["pharm"] || 0) > 0 && Array.isArray(drugs)) {
+          setTimeout(() => {
+            const pharmBlock = document.querySelector('[data-ability="pharm"]');
+            if (!pharmBlock) return;
+
+            const selects = pharmBlock.querySelectorAll(".drug-dropdown");
+            const effects = pharmBlock.querySelectorAll(".drug-effect");
+
+            drugs.forEach((drug, index) => {
+              const adjustedIndex = index + 1;
+              const select = selects[adjustedIndex];
+              const effect = effects[index];
+              if (select) {
+                select.value = drug;
+                effect.textContent = getDrugEffect(drug);
+              }
+            });
+          }, 100);
+        }
+      }
+    });
 
 // Функция для получения названия препарата
 function getDrugName(value) {
@@ -513,28 +558,8 @@ function getDrugEffect(value) {
     "vpsk": "Бодрствование без сна на 24 часа. Один раз в неделю."
   };
   return drugEffects[value] || '';
-}
-
-fetch(`/api/get-char-skills/${charId}/`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "ok") {
-        const ability = data.ability || {};
   
-        // Для каждого блока ability-block
-        document.querySelectorAll(".ability-block").forEach(block => {
-          const abilityName = block.dataset.ability; // Получаем имя способности из data-ability
-          const points = ability[abilityName] || 0; // Получаем количество очков из data.ability
-          const plusButton = block.querySelector(".plus"); // Кнопка "plus"
-  
-          // Нажимаем кнопку "plus" нужное количество раз
-          for (let i = 0; i < points; i++) {
-            plusButton.click();
-          }
-        });
-      }
-    })
-}
+}}
 
   if (role === 'media') {
     if (rolelevel >= 1 && rolelevel <= 2) {
@@ -659,7 +684,7 @@ function saveSkills() {
   const role = document.querySelector('.role').value;
   const hp = document.querySelector('.real_hp').value;
   const role_level = document.querySelector('.role_level').value;
-  const ability = updatePoints(); // collectMedtechPoints() || 0;
+  const ability = collectPointsPlusDrugs() || {};
 
 
   fetch('/api/save-char/', {
@@ -690,7 +715,7 @@ function saveSkills() {
   });
 }
 
-// начальное отображение сохраненный данных
+// начальное отображение сохраненны й данных
 document.addEventListener("DOMContentLoaded", function () {
   const charId = document.body.dataset.charId;
 
