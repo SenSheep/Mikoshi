@@ -1,3 +1,7 @@
+function f() {
+  alert(minusHum);
+}
+
 // ПРАВИЛЬНОЕ ОТОБРАЖЕНИЕ СТАТОВ
 function updateSkillStats() {
   const statInputs = document.querySelectorAll('.stat');
@@ -15,11 +19,21 @@ function updateSkillStats() {
     maxHpField.value = max_hp;
   }
 
+  const maxHum = document.querySelector('.max_hum');
+  maxHum.value = (statMap['emp'] * 10) - minusHum;
+
   // Обновляем все поля скиллов
+  const hum = document.querySelector('.real_hum').value;
+  const e = document.querySelector('.new_stat') 
   document.querySelectorAll('.stat-from').forEach(skillStatInput => {
     const from = skillStatInput.dataset.from; // например, "int"
     const value = statMap[from] || 0;
     skillStatInput.value = value;
+    if (from === "emp") {
+      h = Math.floor(hum / 10);
+      e.value = h;
+      skillStatInput.value = h;
+    };
 
     // Обновляем сумму
     const row = skillStatInput.closest("tr");
@@ -47,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // АВТОМАТИЧЕСКОЕ СОХРАНЕНИЕ ПРИ ИЗМЕНЕНИИ ПОЛЕЙ
 document.addEventListener("DOMContentLoaded", function () {
   // Обработчики для полей ввода
-  document.querySelectorAll(".level, .mod, .stat, .armor, .name, .real_hp, .role_level")
+  document.querySelectorAll(".level, .mod, .stat, .armor, .name, .real_hp, .role_level, .real_hum")
     .forEach(input => {
       input.addEventListener("input", () => {
         updateSkillStats();
@@ -64,9 +78,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
-
-
-
 
 // Загрузка описания роли
 function showRoleDesc() {
@@ -682,9 +693,11 @@ function saveSkills() {
   const inventory = collectInventory();
   const name = document.querySelector('.name').value;
   const role = document.querySelector('.role').value;
-  const hp = document.querySelector('.real_hp').value;
+  const hp = document.querySelector('.real_hp').value || 0;
+  const hum = document.querySelector('.real_hum').value || 0;
   const role_level = document.querySelector('.role_level').value;
   const ability = collectPointsPlusDrugs() || {};
+  const cyberware = collectCyberware() || [];
 
 
   fetch('/api/save-char/', {
@@ -703,7 +716,8 @@ function saveSkills() {
       inventory: inventory,
       role_level: role_level,
       ability: ability,
-      
+      hum: hum,
+      cyberware: cyberware,      
     })
   })
   .then(response => response.json())
@@ -715,6 +729,7 @@ function saveSkills() {
   });
 }
 
+let minusHum = 0;
 // начальное отображение сохраненны й данных
 document.addEventListener("DOMContentLoaded", function () {
   const charId = document.body.dataset.charId;
@@ -730,7 +745,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const role = data.role;
         const role_choice = data.role_choice;
         const hp = data.hp;
-        const role_level = data.role_level;        
+        const role_level = data.role_level;   
+        const hum = data.hum;
+        const cyberware = data.cyberware || [];
+        
         // ИНВЕНТАРЬ
         loadInventory(data.inventory)
 
@@ -775,10 +793,50 @@ document.addEventListener("DOMContentLoaded", function () {
         const hpInput = document.querySelector(`.real_hp`);
         if (hpInput) hpInput.value = hp ?? 0;
 
+        // REAL HUM 
+        const humInput = document.querySelector(`.real_hum`);
+        const maxHum = document.querySelector('.max_hum');
+        if (humInput) humInput.value = hum ?? 0;
+
+        // ИМПЛАНТЫ
+        Object.entries(cyberware).forEach(([type, info]) => {
+          const block = document.querySelector(`.cyberware-block[data-type="${type}"]`);
+          if (!block) return;
+      
+          // Включение/выключение чекбокса
+          const checkbox = block.querySelector('.main-toggle');
+          if (checkbox) {
+            checkbox.checked = info.status;
+            // УРОН ПО ПО МАКС ЧЕЛ
+            if (checkbox.checked) {
+              minusHum++;
+            }
+          } 
+      
+          // Очистка текущих модов
+          const modList = block.querySelector(`.mod-list[data-for="${type.replace('cyber', '')}"]`);
+          if (!modList) return;
+          modList.innerHTML = "";
+      
+          // Добавление модификаций
+          const mods = info.mods || [];
+          mods.forEach(modRef => {
+            const modcyberware = (cyberModCatalog[type.replace('cyber', '')] || []).find(m => m.id === modRef.id);
+            if (modcyberware) {
+              minusHum++;              // УРОН ПО ПО МАКС ЧЕЛ
+              addModification(type.replace('cyber', ''), modcyberware.name, modcyberware.desc);
+            }
+          });
+        });
+
+        
+
       } else {
         console.error("Не удалось загрузить навыки:", data.message);
       }
-      updateSkillStats()
+      
+      // PSYCHO(hum);
+      updateSkillStats();
     })
     .catch(err => {
       console.error("Ошибка запроса:", err);

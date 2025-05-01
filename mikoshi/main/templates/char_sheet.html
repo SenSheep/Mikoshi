@@ -5,6 +5,8 @@
         <link rel="stylesheet" href="{% static 'css/lc.css' %}">
         <link rel="stylesheet" href="{% static 'css/modal_s.css' %}">
         <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
+        <link rel="stylesheet" href="{% static 'css/psycho.css' %}">
+
     </head>
     <body data-char-id="{{ character.id }}">
         <nav class="menu">
@@ -139,74 +141,43 @@
                         </td> <!--  ОПИСАНИЕ РОЛЕВОЙ СПОСОБНОСТИ -->
                     </tr>
                 </table>
-                <table id="weapon">
-                    <tr>
-                        <th colspan="4">Вооружение</th>
-                    </tr>
-                    <tr>
-                        <th>Название</th>
-                        <th>УРОН</th>
-                        <th>СКО</th>
-                        <th>БОЕП</th>
-                    </tr>
-                    <tr>
-                        <td><input></td>
-                        <td><input></td>
-                        <td><input></td>
-                        <td><input></td>
-                    </tr>
-                    <tr>
-                        <td><input></td>
-                        <td><input></td>
-                        <td><input></td>
-                        <td><input></td>
-                    </tr>
-                    <tr>
-                        <td><input></td>
-                        <td><input></td>
-                        <td><input></td>
-                        <td><input></td>
-                    </tr>
-                    <tr>
-                        <td><input></td>
-                        <td><input></td>
-                        <td><input></td>
-                        <td><input></td>
-                    </tr>
-                </table>
             </div>
     
             <div class="second_col">
                 <table id="stat_table">
                     <tr>
                         <th>ИНТ</th>
-                        <td><input class="stat" data-stat="int"></td>
+                        <td><input type = 'number' class="stat" data-stat="int"></td>
                         <th>РЕА</th>
-                        <td><input class="stat" data-stat="ref"></td>
+                        <td><input type = 'number' class="stat" data-stat="ref"></td>
                     </tr>
                     <tr>
                         <td>ЛВК</td>
-                        <td><input class="stat" data-stat="dex"></td>
+                        <td><input type = 'number' class="stat" data-stat="dex"></td>
                         <td>ТЕХ</td>
-                        <td><input class="stat" data-stat="tech"></td>
+                        <td><input type = 'number' class="stat" data-stat="tech"></td>
                     </tr>
                     <tr>
                         <td>ХАР</td>
-                        <td><input class="stat" data-stat="cool"></td>
+                        <td><input type = 'number' class="stat" data-stat="cool"></td>
                         <td>ВОЛЯ</td>
-                        <td><input class="stat" data-stat="will"></td>
+                        <td><input type = 'number' class="stat" data-stat="will"></td>
                     </tr>
                     <tr>
                         <td>СКО</td>
-                        <td><input class="stat" data-stat="move"></td>
+                        <td><input type = 'number' class="stat" data-stat="move"></td>
                         <td>ТЕЛ</td>
-                        <td><input class="stat" data-stat="body"></td>
+                        <td><input type = 'number' class="stat" data-stat="body"></td>
                     </tr>
                     <tr>
-                        <td>ЭМП</td>
-                        <td><input class="stat" data-stat="emp"></td>
-                        <td>УДЧ</td>
-                        <td><input class="stat" data-stat="luck"></td>
+                        <td rowspan="2">ЭМП</td>
+                        <td><input type = 'number' class="stat" data-stat="emp"></td>
+                        <td rowspan="2">УДЧ</td>
+                        <td><input type = 'number' class="stat" data-stat="luck"></td>
+                    </tr>
+                    <tr>
+                        <td><input type = 'number' class="new_stat" data-stat="new_emp"></td>
+                        <td><input type = 'number'></td>
                     </tr>
                 </table>
     
@@ -231,8 +202,8 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><input></td>
-                            <td><input class = 'max_emp' readonly></td>
+                            <td><input type = 'number' class = 'real_hum'></td>
+                            <td><input class = 'max_hum' readonly></td>
                         </tr>
                     </tbody>
 
@@ -258,16 +229,35 @@
                     </tbody>
                 </table>
                 
+                <button onclick="f()">TEST BUTTON</button>
                 <!-- Затемнённый фон и модальное окно -->
-                Получение урона
+                Калькулятор
                 <div id="modalOverlayDamage" class="modal-overlay">
                     <div class="modal" style="display: grid">
-                        <h2>Получение урона</h2>
+                        <h2>Калькулятор Здоровья, Брони и Человечности
+                        </h2>
                         <div>
                             <label><input type="checkbox" class="damageEffect" data-type="piercing"> Бронебойный</label><br>
                             <label><input type="checkbox" class="damageEffect" data-type="through"> Сквозь броню</label><br>
                             <label><input type="checkbox" class="damageEffect" data-type="piercingless"> Игнорирование 1/2 брони</label><br>                     
                         </div>
+                        <div>
+                            <label><input type="radio" class="damagePart" data-type="head" required> В Голову</label><br>
+                            <label><input type="radio" class="damagePart" data-type="body"> В Тело</label><br>
+                            <label><input type="radio" class="damagePart" data-type="shield"> В Щит</label><br>                     
+                        </div>
+                        <script>
+                            const checkboxes = document.querySelectorAll('.damagePart');
+                            checkboxes.forEach(cb => {
+                              cb.addEventListener('change', () => {
+                                if (cb.checked) {
+                                  checkboxes.forEach(other => {
+                                    if (other !== cb) other.checked = false;
+                                  });
+                                }
+                              });
+                            });
+                          </script>
                         <table>
                             <tr>
                                 <td><input class = "damage"></td>
@@ -276,6 +266,13 @@
                             <tr>
                                 <td><button id="closeModalBtn" onclick="getDamage()">Получить урон</button></td>
                                 <td><button id="closeModalBtn" onclick="getHeal()">Вылечиться</button></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><input class = "hum"></td>
+                            </tr>
+                            <tr>
+                                <td><button id="closeModalBtn" onclick="getDamageHum()">adam smasher</button></td>
+                                <td><button id="closeModalBtn" onclick="getHum()">human being</button></td>
                             </tr>
                         </table>
                     </div>
@@ -345,7 +342,7 @@
                         <th>MOD</th>
                         <th>SUM</th>
                     </tr>
-                    <tr>
+                    <tr>v
                         <th class = 'skill_name'>Athletics (DEX)</th>
                         <td><input type = 'text' class = 'level'></td>
                         <td><input class = 'stat-from' data-from="dex" readonly></td>

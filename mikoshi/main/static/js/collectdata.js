@@ -81,3 +81,35 @@ function collectInventory() {
 
   return inventoryMap;
 }
+
+function collectCyberware() {
+  const data = {};
+
+  document.querySelectorAll('.cyberware-block').forEach(block => {
+    const type = block.getAttribute('data-type');
+    const shortType = type.replace('cyber', '');
+    const checkbox = block.querySelector('.main-toggle');
+
+    const mods = [];
+    block.querySelectorAll('.mod-list .mod').forEach(modDiv => {
+      const name = modDiv.querySelector('h4')?.childNodes[0]?.nodeValue.trim();
+      if (name) {
+        // Поиск ID по имени из каталога
+        const catalogMods = cyberModCatalog[shortType] || [];
+        const modObj = catalogMods.find(mod => mod.name === name);
+        if (modObj && modObj.id) {
+          mods.push({ id: modObj.id });
+        } else {
+          console.warn(`Модификация "${name}" не найдена в каталоге ${shortType}`);
+        }
+      }
+    });
+
+    data[type] = {
+      status: checkbox?.checked || false,
+      mods: mods
+    };
+  });
+  return data;
+}
+

@@ -1,0 +1,15 @@
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-0.2px, 0.2px); }
+    40% { transform: translate(0.2px, -0.2px); }
+    60% { transform: translate(-0.1px, 0.1px); }
+    80% { transform: translate(0.1px, -0.1px); }
+    100% { transform: translate(0); }
+  }
+  
+  .glitch {
+    animation: glitch 0.3s infinite;
+    color: red;
+    text-shadow: 0.1px 0 red, -1px 0 blue;
+  }
+  

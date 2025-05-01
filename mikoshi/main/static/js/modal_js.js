@@ -14,59 +14,79 @@ document.getElementById("modalOverlayDamage").addEventListener("click", function
 // Получение урона + эффекты урона
 function getDamage() {
   const realHpField = document.querySelector('.real_hp');
-  const armor_bodyField = document.querySelector('input.armor[data-armor="body"]');
   const damageField = document.querySelector('.damage');
 
-  const piercing = document.querySelector('input.damageEffect[data-type="piercing"]'); //Бронебойные
-  const through = document.querySelector('input.damageEffect[data-type="through"]'); //Сквозь броню
-  const piercingless = document.querySelector('input.damageEffect[data-type="piercingless"]'); //Игнор 1\2 брони
+  const piercing = document.querySelector('input.damageEffect[data-type="piercing"]'); // Бронебойные
+  const through = document.querySelector('input.damageEffect[data-type="through"]');   // Сквозь броню
+  const piercingless = document.querySelector('input.damageEffect[data-type="piercingless"]'); // Игнор 1/2 брони
+
+  // Получаем выбранную часть тела
+  const selectedPart = document.querySelector('.damagePart:checked');
+  if (!selectedPart) {
+    alert("Выберите место попадания (голова, тело или щит)");
+    return;
+  }
+  const hitLocation = selectedPart.dataset.type;
+
+  const armorField = document.querySelector(`input.armor[data-armor="${hitLocation}"]`);
+  if (!armorField) {
+    alert("Ошибка: броня для места попадания не найдена");
+    return;
+  }
+
   const realHp = parseInt(realHpField.value, 10);
-  const armor_body = parseInt(armor_bodyField.value, 10);
+  const armor = parseInt(armorField.value, 10);
   const damage = parseInt(damageField.value, 10);
 
-  //Игнор 1\2 брони
+  if (selectedPart.dataset.type == 'shield') {
+    if (armor - damage < 0) {
+      armorField.value = 0;
+      return;
+    }
+    armorField.value = (armor - damage);
+    return;
+  }
+
+  if (isNaN(realHp) || isNaN(armor) || isNaN(damage)) {
+    alert("Проверьте значения HP, брони и урона — все должны быть числами");
+    return;
+  }
+
+  // Игнор 1/2 брони
   if (piercingless.checked) {
-    if (damage - Math.ceil(armor_body / 2) < 0) {
+    const effectiveArmor = Math.ceil(armor / 2);
+    if (damage - effectiveArmor < 0) {
       return alert("Не пробил");
     }
-    const real_damage = realHp - (damage - Math.ceil(armor_body / 2));
-    realHpField.value = real_damage;
-    if (piercing.checked) { //Бронебойные
-      armor_bodyField.value = armor_body - 2;
+    realHpField.value = realHp - (damage - effectiveArmor);
+    if (armor - (piercing.checked ? 2 : 1) < 0) {
+      armorField.value = 0;
+      return;
     }
-    else {
-      armor_bodyField.value = armor_body - 1;
-    }
+    armorField.value = armor - (piercing.checked ? 2 : 1);
     return;
   }
 
-  //Сквозь броню
+  // Сквозь броню
   if (through.checked) {
-    const real_damage = realHp - damage;
-    realHpField.value = real_damage;
-    if (piercing.checked) { //Бронебойные
-      armor_bodyField.value = armor_body - 2;
-    }
-    else {
-      armor_bodyField.value = armor_body - 1;
-    }
+    realHpField.value = realHp - damage;
+    armorField.value = armor - (piercing.checked ? 2 : 1);
     return;
   }
 
-  // Обычные
-  if (damage - armor_body < 0) {
+  // Обычный урон
+  if (damage - armor < 0) {
     return alert("Не пробил");
   }
-  const real_damage = realHp - (damage - armor_body);
-  realHpField.value = real_damage;
-  if (piercing.checked) { //Бронебойные
-    armor_bodyField.value = armor_body - 2;
+  realHpField.value = realHp - (damage - armor);
+  if (armor - (piercing.checked ? 2 : 1) < 0) {
+    armorField.value = 0;
+    return;
   }
-  else {
-    armor_bodyField.value = armor_body - 1;
-  }
+  armorField.value = armor - (piercing.checked ? 2 : 1);
   return;
 }
+
 
 // ЛЕЧЕНИЕ
 function getHeal() {
@@ -87,6 +107,41 @@ function getHeal() {
   saveSkills();
 }
 
+// ОЧЕЛОВЕЧИВАНИЕ
+function getHum() {
+  const realhumField = document.querySelector('.real_hum');
+  const humField = document.querySelector('.hum');
+  const maxHumField = document.querySelector('.max_hum');
+
+  const maxHum = parseInt(maxHumField.value, 10) || 0;
+  const realhum = parseInt(realhumField.value, 10) || 0;
+  const hum = parseInt(humField.value, 10) || 0;
+
+  if ((realhum + hum) >= maxHum) {
+    realhumField.value = maxHum;
+    saveSkills();
+    return;
+  }
+  realhumField.value = realhum + hum;
+  saveSkills();
+}
+
+// ОБЕСЧЕЛОВЕЧИВАНИЕ
+function getDamageHum() {
+  const realhumField = document.querySelector('.real_hum');
+  const humField = document.querySelector('.hum');
+  const maxHumField = document.querySelector('.max_hum');
+
+  const maxHum = parseInt(maxHumField.value, 10) || 0;
+  const realhum = parseInt(realhumField.value, 10) || 0;
+  const hum = parseInt(humField.value, 10) || 0;
+
+  
+  realhumField.value = realhum - hum;
+  PSYCHO();
+  saveSkills();
+}
+
 // --- Модалка для киберимплантов ---
 // Данные по имплантам находятся в файле cyberware.js
 let currentCyberTarget = null;
@@ -101,6 +156,15 @@ document.querySelectorAll('.add-mod').forEach(button => {
 });
 
 // ЗАГРУЖАЕМ МОДЫ
+document.getElementById("closeModModal").addEventListener("click", () => {
+  updateSkillStats();
+  document.getElementById("modalOverlayCyber").style.display = "none";
+});
+
+document.getElementById("modalOverlayCyber").addEventListener("click", function (e) {
+  if (e.target === this) this.style.display = "none";
+});
+
 function showModOptions(target) {
   const modList = cyberModCatalog[target] || [];
   const container = document.getElementById('modOptionsContainer');
@@ -116,7 +180,8 @@ function showModOptions(target) {
     `;
     div.addEventListener('click', () => {
       addModification(target, mod.name, mod.desc);
-      closeModModal();
+      document.getElementById("modalOverlayCyber").style.display = "none";
+      saveSkills();
     });
     container.appendChild(div);
   });
@@ -135,17 +200,11 @@ function addModification(targetId, modName, modDesc) {
   `;
   modDiv.querySelector('.remove-mod').addEventListener('click', () => {
     modDiv.remove();
+    humInput.value++;
+    saveSkills();
   });
   modList.appendChild(modDiv);
 }
-
-document.getElementById("closeModModal").addEventListener("click", () => {
-  document.getElementById("modalOverlayCyber").style.display = "none";
-});
-
-document.getElementById("modalOverlayCyber").addEventListener("click", function (e) {
-  if (e.target === this) this.style.display = "none";
-});
 
 // МОДАЛКА ДЛЯ ИЗМЕНЕНИЕ РОЛИ
 function toggleRoleEdit() {

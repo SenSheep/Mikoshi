@@ -41,3 +41,54 @@
 .mod-option:hover {
   background: #d2d2d2;
 }
+
+h2 {
+  margin: 0;
+  color: #b30000;
+  text-align: center;
+  font-size: 1.4rem;
+}
+
+.modal label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: #b30000;
+  margin-right: 8px;
+}
+
+.modal table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+input[type="text"],
+input.damage,
+input.heal,
+input.hum {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.modal td {
+  padding: 6px;
+  vertical-align: top;
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+}

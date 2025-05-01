@@ -72,9 +72,11 @@ def save_char(request):
         name = data.get('name')
         role = data.get('role')
         hp = data.get('hp')
+        hum = data.get('hum')
         inventory = data.get('inventory')
         role_level = data.get('role_level')
         ability = data.get('ability')
+        cyberware = data.get('cyberware')
 
         try:
             char = Character.objects.get(id=char_id)
@@ -84,9 +86,11 @@ def save_char(request):
             char.name = name
             char.role = role
             char.hp = hp
+            char.hum = hum
             char.inventory = inventory
             char.role_level = role_level
             char.ability = ability
+            char.cyberware = cyberware
             char.save()
             return JsonResponse({'status': 'ok'})
         except Character.DoesNotExist:
@@ -114,6 +118,7 @@ def get_char_skills(request, char_id):
         char = Character.objects.get(id=char_id)
         return JsonResponse({"status": "ok", "skills": char.skills, 'stats': char.stats, 'armor': char.armor,
                              'name': char.name, 'role_choice': ROLE_TRANSLATIONS.get(char.role, char.role), 'role': (char.role), 
-                             'hp': char.hp, 'inventory': char.inventory, 'role_level': char.role_level, 'ability': char.ability})
+                             'hp': char.hp, 'inventory': char.inventory, 'role_level': char.role_level, 'ability': char.ability,
+                             'hum': char.hum, 'cyberware': char.cyberware})
     except Character.DoesNotExist:
         return JsonResponse({"status": "error", "message": "Character not found"})
