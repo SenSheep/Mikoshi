@@ -1,0 +1,126 @@
+body {
+    width: 99%;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: 20% 17% 63%;
+    gap: 5px;
+    margin-top: 50px;
+    font-family: Arial, Helvetica, sans-serif
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    justify-self: center;
+}
+
+td, th {
+    border: 2px solid black;
+    text-align: center;
+}
+
+th {
+    background-color: black;
+    color: white;
+}
+
+.skill_name {
+    background-color: rgb(203, 9, 9);
+    color: white;
+}
+
+#weapon input {
+    width: 50%;
+    text-align: center;
+}
+
+#skill_table input {
+    width: 70%;
+    height: 100%;
+    text-align: center;
+    border: none;
+}
+
+#stat_table input {
+    width: 50%;
+    text-align: center;
+}
+
+#hp_emp_armor input {
+    width: 50%;
+    text-align: center;
+}
+
+/* Стили для верхнего меню */
+.menu {
+    background-color: rgb(203, 9, 9); /* Красный фон */
+    padding: 10px 0;
+    position: fixed; /* Фиксированное меню */
+    top: 0;
+    width: 100%;
+}
+.menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+.menu li {
+    margin: 0 15px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px 15px;
+    transition: background 0.3s;
+}
+
+.menu a:hover {
+    background: #530e07; /* Красный при наведении */
+    border-radius: 5px;
+}
+
+.roles {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.role-card {
+border: 2px solid #ffffff;
+padding: 10px;
+cursor: pointer;
+width: 100%;
+transition: 0.2s;
+}
+
+.role-card:hover {
+border-color: #333;
+background: #5a5a5a;
+}
+
+.role-card input {
+display: none;
+}
+
+.role-card input:checked + .card-content,
+.role-card:has(input:checked) {
+border-color: #b10808;
+background: #5a5a5a;
+}
+
+.card-content h3 {
+margin: 0 0 5px;
+}
+
+.card-content p {
+margin: 0;
+font-size: 14px;
+}

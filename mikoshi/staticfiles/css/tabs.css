@@ -1,0 +1,81 @@
+/* Вкладки НАВЫКОВ, ИНВЕНТАРЯ, КИБЕРИМПЛАНТОВ */
+.third_col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+/* Кнопки в ряд */
+.tab-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 8px;
+  background: #eee;
+  border: none;
+  cursor: pointer;
+}
+
+.tab-btn.active {
+  background: #ccc;
+}
+
+/* Скрытие неактивных вкладок */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: flex;
+}
+
+/* Скролл навыков */
+.skills-scroll-area {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  height: 80%; /* или любое другое значение по вкусу */
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+/* ВКЛАДКА КИБЕРИМПЛАНТОВ */
+.cyberware-grid {
+  display: grid;
+  grid-template-columns: 25% 25% 25%;
+  gap: 20px;
+  padding: 20px;
+}
+
+.cyberware-block {
+  background: #ffffff;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.cyberware-section {
+  border-collapse: collapse;
+  border: 2px solid #000000;
+}
+
+.cyberware-section:first-child {
+  border-bottom: none;
+}
+
+.cyberware-section h4 {
+  background-color: black;
+  color: white; 
+  margin: 0; 
+  font-size: 16px;
+  padding-bottom: 1px;
+}
+
+.cyberware-section p {
+  padding: 0;
+  margin: 0;
+}
