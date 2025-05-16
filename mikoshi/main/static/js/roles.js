@@ -1,86 +1,6 @@
-function f() {
-  alert(minusHum);
-}
+import { saveSkills } from "./api.js";
 
-// ПРАВИЛЬНОЕ ОТОБРАЖЕНИЕ СТАТОВ
-function updateSkillStats() {
-  const statInputs = document.querySelectorAll('.stat');
-
-  // Собираем значения всех статов в объект
-  const statMap = collectStats();
-
-  // Высчитываем максимальное hp
-  let sbody = statMap['body']
-  let swill = statMap['will'] 
-  let max_hp = 10 + (5 * Math.ceil((swill + sbody) /2))
-
-  const maxHpField = document.querySelector('.max_hp');
-  if (maxHpField) {
-    maxHpField.value = max_hp;
-  }
-
-  const maxHum = document.querySelector('.max_hum');
-  maxHum.value = (statMap['emp'] * 10) - minusHum;
-
-  // Обновляем все поля скиллов
-  const hum = document.querySelector('.real_hum').value;
-  const e = document.querySelector('.new_stat') 
-  document.querySelectorAll('.stat-from').forEach(skillStatInput => {
-    const from = skillStatInput.dataset.from; // например, "int"
-    const value = statMap[from] || 0;
-    skillStatInput.value = value;
-    if (from === "emp") {
-      h = Math.floor(hum / 10);
-      e.value = h;
-      skillStatInput.value = h;
-    };
-
-    // Обновляем сумму
-    const row = skillStatInput.closest("tr");
-    const level = parseInt(row.querySelector(".level")?.value || 0, 10);
-    const mod = parseInt(row.querySelector(".mod")?.value || 0, 10);
-    const sumField = row.querySelector(".sum");
-    if (sumField) {
-      sumField.value = level + value + mod;
-    }
-}) 
-}
-
-// СОХРАНЕНИЕ ПРИ ИЗМЕНЕНИИ ПОЛЕЙ В ИНВЕНТАРЕ
-document.addEventListener('DOMContentLoaded', () => {
-  const table = document.getElementById('inventory_table');
-
-  table.addEventListener('focusout', (event) => {
-    const target = event.target;
-    if (target.classList.contains('item_name') || target.classList.contains('item_desc')) {
-      saveSkills();
-    }
-  });
-});
-
-// АВТОМАТИЧЕСКОЕ СОХРАНЕНИЕ ПРИ ИЗМЕНЕНИИ ПОЛЕЙ
-document.addEventListener("DOMContentLoaded", function () {
-  // Обработчики для полей ввода
-  document.querySelectorAll(".level, .mod, .stat, .armor, .name, .real_hp, .role_level, .real_hum")
-    .forEach(input => {
-      input.addEventListener("input", () => {
-        updateSkillStats();
-        saveSkills();
-        showRoleDesc();
-      });
-    });
-
-  // Обработчик для выбора препарата (если он есть)
-  const select = document.getElementById("drugDropdown");
-  if (select) {
-    select.addEventListener("change", () => {
-      saveSkills();
-    });
-  }
-});
-
-// Загрузка описания роли
-function showRoleDesc() {
+export function showRoleDesc() {
   const role = document.querySelector('.role').value;
   const rolelevel = parseInt(document.getElementById('role_level').value, 10) || 0;
   const roleDescField = document.getElementById('roleAbilities')
@@ -395,7 +315,6 @@ function showRoleDesc() {
           current++;
           maxPoints--;
           pointsSpan.textContent = current;
-          collectPoints(ability, current);
           updateEffect(block.dataset.ability, current, effectText);
           saveSkills()
         }
@@ -408,7 +327,6 @@ function showRoleDesc() {
           current--;
           maxPoints++;
           pointsSpan.textContent = current;
-          collectPoints(ability, current);
           updateEffect(block.dataset.ability, current, effectText);
           saveSkills()
         }
@@ -520,7 +438,6 @@ function updateEffect(ability, points, el) {
           const effectText = block.querySelector(".effect-text");
 
           pointsSpan.textContent = points;
-          collectPoints(abilityName, points);
           updateEffect(abilityName, points, effectText);
         });
 
@@ -683,162 +600,3 @@ function getDrugEffect(value) {
   if (role === 'nomad') {
   }
 }
-
-// СОХРАНЕНИЕ ДАННЫХ
-function saveSkills() {
-  const charId = document.body.dataset.charId;
-  const skillsData = collectSkills() || 0;
-  const statsData = collectStats();
-  const armorData = collectArmor();
-  const inventory = collectInventory();
-  const name = document.querySelector('.name').value;
-  const role = document.querySelector('.role').value;
-  const hp = document.querySelector('.real_hp').value || 0;
-  const hum = document.querySelector('.real_hum').value || 0;
-  const role_level = document.querySelector('.role_level').value;
-  const ability = collectPointsPlusDrugs() || {};
-  const cyberware = collectCyberware() || [];
-
-
-  fetch('/api/save-char/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      char_id: charId,  // ID персонажа
-      skills: skillsData,
-      stats: statsData,
-      armor: armorData,
-      name: name,
-      role: role,
-      hp: hp,
-      inventory: inventory,
-      role_level: role_level,
-      ability: ability,
-      hum: hum,
-      cyberware: cyberware,      
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.status === 'ok') {
-    } else {
-      alert("Error: " + data.message);
-    }
-  });
-}
-
-let minusHum = 0;
-// начальное отображение сохраненны й данных
-document.addEventListener("DOMContentLoaded", function () {
-  const charId = document.body.dataset.charId;
-
-  fetch(`/api/get-char-skills/${charId}/`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "ok") {
-        const skills = data.skills;
-        const stats = data.stats;
-        const armor = data.armor;
-        const name = data.name;
-        const role = data.role;
-        const role_choice = data.role_choice;
-        const hp = data.hp;
-        const role_level = data.role_level;   
-        const hum = data.hum;
-        const cyberware = data.cyberware || [];
-        
-        // ИНВЕНТАРЬ
-        loadInventory(data.inventory)
-
-        // СТАТЫ
-        for (const [statName, value1] of Object.entries(stats)) {
-          const statInput = document.querySelector(`.stat[data-stat="${statName}"]`);
-
-          if (statInput) statInput.value = value1 ?? 0;
-        }
-
-        // СКИЛЛЫ
-        for (const [skillName, values2] of Object.entries(skills)) {
-          const levelInput = document.querySelector(`.level[data-skill="${skillName}"]`);
-          const modInput = document.querySelector(`.mod[data-skill="${skillName}"]`);
-
-          if (levelInput) levelInput.value = values2.level ?? 0;
-          if (modInput) modInput.value = values2.mod ?? 0;
-        }
-
-        // БРОНЯ
-        for (const [armorName, value3] of Object.entries(armor)) {
-          const armorInput = document.querySelector(`.armor[data-armor="${armorName}"]`);
-
-          if (armorInput) armorInput.value = value3 ?? 0;
-        }
-        
-        // ИМЯ
-        const nameInput = document.querySelector(`.name`);
-        if (nameInput) nameInput.value = name ?? '';
-
-        // РОЛЬ
-        const hidden = document.getElementById('roleHiddenInput')
-        const roleInput = document.querySelector(`.role-choice`);
-        if (hidden) hidden.value = role ?? '';
-        if (roleInput) roleInput.value = role_choice ?? '';
-
-        const role_levelField = document.getElementById("role_level");
-        if (role_levelField) role_levelField.value = role_level ?? '';
-        showRoleDesc()
-
-        // REAL HP
-        const hpInput = document.querySelector(`.real_hp`);
-        if (hpInput) hpInput.value = hp ?? 0;
-
-        // REAL HUM 
-        const humInput = document.querySelector(`.real_hum`);
-        const maxHum = document.querySelector('.max_hum');
-        if (humInput) humInput.value = hum ?? 0;
-
-        // ИМПЛАНТЫ
-        Object.entries(cyberware).forEach(([type, info]) => {
-          const block = document.querySelector(`.cyberware-block[data-type="${type}"]`);
-          if (!block) return;
-      
-          // Включение/выключение чекбокса
-          const checkbox = block.querySelector('.main-toggle');
-          if (checkbox) {
-            checkbox.checked = info.status;
-            // УРОН ПО ПО МАКС ЧЕЛ
-            if (checkbox.checked) {
-              minusHum++;
-            }
-          } 
-      
-          // Очистка текущих модов
-          const modList = block.querySelector(`.mod-list[data-for="${type.replace('cyber', '')}"]`);
-          if (!modList) return;
-          modList.innerHTML = "";
-      
-          // Добавление модификаций
-          const mods = info.mods || [];
-          mods.forEach(modRef => {
-            const modcyberware = (cyberModCatalog[type.replace('cyber', '')] || []).find(m => m.id === modRef.id);
-            if (modcyberware) {
-              minusHum++;              // УРОН ПО ПО МАКС ЧЕЛ
-              addModification(type.replace('cyber', ''), modcyberware.name, modcyberware.desc);
-            }
-          });
-        });
-
-        
-
-      } else {
-        console.error("Не удалось загрузить навыки:", data.message);
-      }
-      
-      // PSYCHO(hum);
-      updateSkillStats();
-    })
-    .catch(err => {
-      console.error("Ошибка запроса:", err);
-    });
-});

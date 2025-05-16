@@ -1,4 +1,4 @@
-const cyberModCatalog = {
+export const cyberModCatalog = {
   // НЕЙРОЛИНК
   style: [ 
     {
@@ -562,15 +562,4 @@ const cyberModCatalog = {
       desc: "Металлический блеск. Даёт +2 к Гардеробу и Стилю. Не занимает слот.",
     }
   ],
-}
-
-function PSYCHO(n) {
-  alert("Вы психопат!");
-  if (n < 0) {
-    setInterval(() => {
-        const mods = document.querySelectorAll('.mod');
-        const rand = mods[Math.floor(Math.random() * mods.length)];
-        if (rand) rand.classList.toggle('glitch');
-        }, 300);
-}
 }

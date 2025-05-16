@@ -271,14 +271,14 @@
                                 <td colspan="2"><input class = "hum"></td>
                             </tr>
                             <tr>
-                                <td><button id="closeModalBtn" onclick="getDamageHum()">adam smasher</button></td>
-                                <td><button id="closeModalBtn" onclick="getHum()">human being</button></td>
+                                <td><button onclick="getDamageHum()">adam smasher</button></td>
+                                <td><button onclick="getHum()">human being</button></td>
                             </tr>
                         </table>
                     </div>
                 </div>
                                 <!-- Кнопка открытия -->
-                <button id="openModalBtn">Открыть окно</button>
+                <button onclick="openDamageModal()">Открыть окно</button>
             </div>
     
             <div class="third_col">
@@ -798,7 +798,7 @@
                 <!-- ВТОРАЯ ВКЛАДКА С ИНВЕНТАРЕМ -->
                 <input type="hidden" id="itemCounter" value="0">
                 <div class="tab-content" data-tab="inventory">
-                    <button onclick="addRow()">Добавить строку</button>
+                    <button onclick="addRowInv()">Добавить строку</button>
                     <table id="inventory_table">
                         <thead>
                         <tr>
@@ -957,10 +957,5 @@
             </div>
         </div>
     </body>
-    <script src="{% static 'js/collectdata.js' %}" defer></script>
-    <script src="{% static 'js/roleleveldesc.js' %}"></script>
-    <script src="{% static 'js/cyberware.js' %}"></script>
-    <script src="{% static 'js/script.js' %}" defer></script>
-    <script src="{% static 'js/tabs.js' %}" defer></script>
-    <script src="{% static 'js/modal_js.js' %}" defer></script>
+    <script type="module" src="{% static 'js/main.js' %}"></script>
 </html>

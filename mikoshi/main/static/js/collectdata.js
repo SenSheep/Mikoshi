@@ -1,4 +1,6 @@
-function collectSkills() {
+import { cyberModCatalog } from './cyberware.js';
+
+export function collectSkills() {
     const skillsMap = {};
   
     document.querySelectorAll('.level').forEach(input => {
@@ -14,18 +16,18 @@ function collectSkills() {
     });
   
     return skillsMap;
-  }
+} // Output: {"concetration": {"level": 2, "mod": 0}, "athletics": {"level": 3, "mod": 0}, ...}
   
-function collectStats() {
+export function collectStats() {
     const statMap = {};
     document.querySelectorAll('.stat').forEach(input => {
       const key = input.dataset.stat; // "int", "ref" и т.д.
       statMap[key] = parseInt(input.value || "0", 10);
     });
     return statMap;
-}
+} // Output: {"int": 6, "ref": 5, "tech": 4, ...}
 
-function collectPoints() {
+export function collectPoints() {
   const statPoints = {}
   document.querySelectorAll(".ability-block").forEach(block => {
     const ability = block.dataset.ability;
@@ -33,9 +35,9 @@ function collectPoints() {
     statPoints[ability] = parseInt(pointsSpan.innerText || "0", 10);
   });
   return statPoints;
-};
+}; // Output: {"abilitiry_1": 2, "abilitiry_2": 0, ...}
 
-function collectDrugs() {
+export function collectDrugs() {
   const drugSelections = [];
   const drugForms = document.querySelectorAll(".drug-form");
 
@@ -46,25 +48,25 @@ function collectDrugs() {
     drugSelections.push(selectedDrug);
   });
   return drugSelections;
-}
+} // Output: ["drug_1", "drug_2", ...]
 
-function collectPointsPlusDrugs() {
+export function collectPointsPlusDrugs() {
   const skillsData = collectPoints();  // вызываешь updatePoints(), если нужно
   const collectedDrugs = collectDrugs();
   skillsData['drugs'] = collectedDrugs;
   return skillsData;
-}
+} // Output: {"abilitiry_1": 2, "abilitiry_2": 0, ..., "drugs": ["drug_1", "drug_2", ...]}
   
-function collectArmor() {
+export function collectArmor() {
     const armorMap = {};
     document.querySelectorAll('.armor').forEach(input => {
       const key = input.dataset.armor; // "head", "body", "shield"
       armorMap[key] = parseInt(input.value || "0", 10);
     });
     return armorMap;
-}
+} // Output: {"head": 2, "body": 3, "shield": 1, ...}
 
-function collectInventory() {
+export function collectInventory() {
   const inventoryMap = {};
 
   document.querySelectorAll('.item_name').forEach(cell => {
@@ -80,9 +82,9 @@ function collectInventory() {
   });
 
   return inventoryMap;
-}
+} // Output: {"item_1": {"item_name": "name_1", "item_desc": "desc_1"}, "item_2": {"item_name": "name_2", "item_desc": "desc_2"}, ...}
 
-function collectCyberware() {
+export function collectCyberware() {
   const data = {};
 
   document.querySelectorAll('.cyberware-block').forEach(block => {
@@ -111,5 +113,4 @@ function collectCyberware() {
     };
   });
   return data;
-}
-
+} // Output: {"cyberware_1": {"status": true, "mods": [{"id": 1}, {"id": 2}]}, "cyberware_2": {"status": false, "mods": [{"id": 3}]}, ...}
