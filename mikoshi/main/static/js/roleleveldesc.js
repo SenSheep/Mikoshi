@@ -1,4 +1,4 @@
-const rockerLevels = {
+export const rockerLevels = {
     "1-2": `
       <b>🎸 Харизматическое Давление </b><br>
 
@@ -117,10 +117,10 @@ const rockerLevels = {
       `,
 }
 
-const soloLevels = {
+export const soloLevels = {
 }
 
-const netrunnerLevels = {
+export const netrunnerLevels = {
 "1-3": `
     <b>Интерфейс </b><br>
 
@@ -319,13 +319,13 @@ const netrunnerLevels = {
 `,
 }
 
-const technieLevels = {
+export const technieLevels = {
 }
 
-const medtechLevels = {
+export const medtechLevels = {
 }
 
-const mediaLevels = {
+export const mediaLevels = {
 "1-2": `
     <b> Доверие </b><br>
 
@@ -433,7 +433,7 @@ const mediaLevels = {
     `,
 }
 
-const corporateLevels = {
+export const corporateLevels = {
     "1-2": `
         <b>🎸 Харизматическое Давление </b><br>
     
@@ -526,7 +526,7 @@ const corporateLevels = {
         `,
 }
 
-const lawmanLevels = {
+export const lawmanLevels = {
     "1-2": `
         <b> Подкрепление </b>
         <br><br>
@@ -583,7 +583,7 @@ const lawmanLevels = {
         `,
 }
 
-const fixerLevels = {
+export const fixerLevels = {
     "1-2": `
         <b>Воротила </b><br>
     
@@ -695,7 +695,7 @@ const fixerLevels = {
         `,
 }
 
-const nomadLevels = {
+export const nomadLevels = {
     "1-2": `
         <b>🎸 Харизматическое Давление </b><br>
     

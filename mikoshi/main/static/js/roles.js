@@ -1,4 +1,5 @@
 import { saveSkills } from "./api.js";
+import * as roledecs from "./roleleveldesc.js";
 
 export function showRoleDesc() {
   const role = document.querySelector('.role').value;
@@ -8,27 +9,27 @@ export function showRoleDesc() {
 
   if (role === 'rocker') {
     if (rolelevel >= 1 && rolelevel <= 2) {
-      const desc = rockerLevels["1-2"];
+      const desc = roledecs.rockerLevels["1-2"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 3 && rolelevel <= 4) {
-      const desc = rockerLevels["3-4"];
+      const desc = roledecs.rockerLevels["3-4"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 5 && rolelevel <= 6) {
-      const desc = rockerLevels["5-6"];
+      const desc = roledecs.rockerLevels["5-6"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 7 && rolelevel <= 8) {
-      const desc = rockerLevels["7-8"];
+      const desc = roledecs.rockerLevels["7-8"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel === 9) {
-      const desc = rockerLevels["9"];
+      const desc = roledecs.rockerLevels["9"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel === 10) {
-      const desc = rockerLevels["10"];
+      const desc = roledecs.rockerLevels["10"];
       roleDescField.innerHTML = desc
     }
   }
@@ -139,19 +140,19 @@ export function showRoleDesc() {
 
   if (role === 'netrunner') {
     if (rolelevel >= 1 && rolelevel <= 3) {
-      const desc = netrunnerLevels["1-3"];
+      const desc = roledecs.netrunnerLevels["1-3"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 4 && rolelevel <= 6) {
-      const desc = netrunnerLevels["4-6"];
+      const desc = roledecs.netrunnerLevels["4-6"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 7 && rolelevel <= 9) {
-      const desc = netrunnerLevels["7-9"];
+      const desc = roledecs.netrunnerLevels["7-9"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel === 10) {
-      const desc = netrunnerLevels["10"];
+      const desc = roledecs.netrunnerLevels["10"];
       roleDescField.innerHTML = desc
     }
   }
@@ -491,27 +492,27 @@ function getDrugEffect(value) {
 
   if (role === 'media') {
     if (rolelevel >= 1 && rolelevel <= 2) {
-      const desc = mediaLevels["1-2"];
+      const desc = roledecs.mediaLevels["1-2"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 3 && rolelevel <= 4) {
-      const desc = mediaLevels["3-4"];
+      const desc = roledecs.mediaLevels["3-4"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 5 && rolelevel <= 6) {
-      const desc = mediaLevels["5-6"];
+      const desc = roledecs.mediaLevels["5-6"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 7 && rolelevel <= 8) {
-      const desc = mediaLevels["7-8"];
+      const desc = roledecs.mediaLevels["7-8"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel === 9) {
-      const desc = mediaLevels["9"];
+      const desc = roledecs.mediaLevels["9"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel === 10) {
-      const desc = mediaLevels["10"];
+      const desc = roledecs.mediaLevels["10"];
       roleDescField.innerHTML = desc
     }
   }
@@ -544,54 +545,54 @@ function getDrugEffect(value) {
 
   if (role === 'lawman') {
     if (rolelevel >= 1 && rolelevel <= 2) {
-      const desc = lawmanLevels["1-2"];
+      const desc = roledecs.lawmanLevels["1-2"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 3 && rolelevel <= 4) {
-      const desc = lawmanLevels["3-4"];
+      const desc = roledecs.lawmanLevels["3-4"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 5 && rolelevel <= 7) {
-      const desc = lawmanLevels["5-7"];
+      const desc = roledecs.lawmanLevels["5-7"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel === 8) {
-      const desc = lawmanLevels["8"];
+      const desc = roledecs.lawmanLevels["8"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel === 9) {
-      const desc = lawmanLevels["9"];
+      const desc = roledecs.lawmanLevels["9"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel === 10) {
-      const desc = lawmanLevels["10"];
+      const desc = roledecs.lawmanLevels["10"];
       roleDescField.innerHTML = desc
     }
   }
 
   if (role === 'fixer') {
     if (rolelevel >= 1 && rolelevel <= 2) {
-      const desc = fixerLevels["1-2"];
+      const desc = roledecs.fixerLevels["1-2"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 3 && rolelevel <= 4) {
-      const desc = fixerLevels["3-4"];
+      const desc = roledecs.fixerLevels["3-4"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 5 && rolelevel <= 6) {
-      const desc = fixerLevels["5-6"];
+      const desc = roledecs.fixerLevels["5-6"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel >= 7 && rolelevel <= 8) {
-      const desc = fixerLevels["7-8"];
+      const desc = roledecs.fixerLevels["7-8"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel === 9) {
-      const desc = fixerLevels["9"];
+      const desc = roledecs.fixerLevels["9"];
       roleDescField.innerHTML = desc
     }
     if (rolelevel === 10) {
-      const desc = fixerLevels["10"];
+      const desc = roledecs.fixerLevels["10"];
       roleDescField.innerHTML = desc
     }
   }
