@@ -1,0 +1,105 @@
+.modal-overlay { /* Создание затемненного фона для модального окна */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalrole { /* Основной стиль модального окна */
+  background-color: #fff;
+  padding: 20px;
+  margin: 10px;
+  width: 80%;
+  position: relative;
+  box-shadow: 0px 0px 40px red;
+}
+
+.modaldamage { /* Основной стиль модального окна */
+  background-color: #fff;
+  padding: 20px;
+  gap: 10px;
+  width: 30%;
+  position: relative;
+  box-shadow: 0px 0px 40px red;
+}
+
+.modalcybermod { /* Основной стиль модального окна */
+  background-color: #fff;
+  padding: 10px;
+  max-height: 90%;
+  width: 50%;
+  position: relative;
+  box-shadow: 0px 0px 40px red;
+}
+
+#modOptionsContainer {
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 60vh;
+}
+
+.modal label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.modal table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modal td {
+  padding: 6px;
+  vertical-align: top;
+}
+
+.close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+input[type="text"],
+input.damage,
+input.heal,
+input.hum {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: #b30000;
+  margin-right: 8px;
+}
+
+h2 {
+  margin: 0;
+  color: #b30000;
+  text-align: center;
+  font-size: 1.4rem;
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+}
+

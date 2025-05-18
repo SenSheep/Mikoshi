@@ -81,6 +81,9 @@ export function collectInventory() {
     inventoryMap[item].item_desc = cell.innerText || "";
   });
 
+  const itemCounterInput = document.getElementById("itemCounter");
+  itemCounterInput.value = Object.keys(inventoryMap).length;
+
   return inventoryMap;
 } // Output: {"item_1": {"item_name": "name_1", "item_desc": "desc_1"}, "item_2": {"item_name": "name_2", "item_desc": "desc_2"}, ...}
 

@@ -19,7 +19,7 @@ export function addRowInv() {
   cell1.setAttribute('data-item', uniqueId);
   cell1.contentEditable = "true";
   cell1.innerText = "";
-  cell.addEventListener('focusout', () => saveSkills(cell));
+  cell1.addEventListener('focusout', () => saveSkills(cell1));
 
 
   // Кнопка удаления строки

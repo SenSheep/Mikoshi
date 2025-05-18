@@ -1,0 +1,38 @@
+.roles {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.role-card {
+  border: 2px solid #ff0000;
+  border-collapse: collapse;
+  padding: 10px;
+  cursor: pointer;
+  width: 80%;
+  transition: 0.2s;
+}
+
+.role-card:hover {
+  border-color: #333;
+  background: #5a5a5a;
+}
+
+.role-card input {
+  display: none;
+}
+
+.role-card input:checked + .card-content,
+.role-card:has(input:checked) {
+  border-color: #b10808;
+  background: #5a5a5a;
+}
+
+.card-content h3 {
+  margin: 0 0 5px;
+}
+
+.card-content p {
+  margin: 0;
+  font-size: 14px;
+}

@@ -2,11 +2,14 @@
 {% load static %}
 <html>
     <head>
-        <link rel="stylesheet" href="{% static 'css/lc.css' %}">
-        <link rel="stylesheet" href="{% static 'css/modal_s.css' %}">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+        <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+        <link rel="stylesheet" href="{% static 'css/skills.css' %}">
+        <link rel="stylesheet" href="{% static 'css/roles.css' %}">
+        <link rel="stylesheet" href="{% static 'css/modals.css' %}">
+        <link rel="stylesheet" href="{% static 'css/cyberware.css' %}">
         <link rel="stylesheet" href="{% static 'css/tabs.css' %}">
-        <link rel="stylesheet" href="{% static 'css/psycho.css' %}">
-
     </head>
     <body data-char-id="{{ character.id }}">
         <nav class="menu">
@@ -29,8 +32,8 @@
                             <td>
                             <input class="role-choice" id="roleInput" readonly>
                             <input type="hidden" class="role" id="roleHiddenInput">
-                            <div id="modalOverlayRole" class="modal-overlay" style="display: none;">
-                                <div class="modal">
+                            <div id="modalOverlayRole" class="modal-overlay">
+                                <div class="modalrole">
                                 <h3>Выберите новую роль:</h3>
                                 <div style = "display: grid;  grid-template-columns: repeat(5, 1fr);
                                 width: 100%; gap: 40px;" class="roles">
@@ -229,12 +232,11 @@
                         </tr>
                     </tbody>
                 </table>
-                
-                <button onclick="f()">TEST BUTTON</button>
+    
                 <!-- Затемнённый фон и модальное окно -->
                 Калькулятор
                 <div id="modalOverlayDamage" class="modal-overlay">
-                    <div class="modal" style="display: grid">
+                    <div class="modaldamage" style="display: grid">
                         <h2>Калькулятор Здоровья, Брони и Человечности
                         </h2>
                         <div>
@@ -1005,7 +1007,7 @@
                     
                     <!-- ОДНО МОДАЛЬНОЕ ОКНО -->
                     <div id="modalOverlayCyber" class="modal-overlay">
-                        <div class="modal">
+                        <div class="modalcybermod">
                             <h3 id="modModalTitle">Выберите модификацию</h3>
                             <div id="modOptionsContainer"></div>
                             <button id="closeModModal">Закрыть</button>

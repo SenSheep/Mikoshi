@@ -1,0 +1,47 @@
+.cyberware-grid {
+  display: grid;
+  grid-template-columns: 23% 23% 23% 23%;
+  gap: 20px;
+  padding: 20px;
+}
+
+.cyberware-block {
+  background: #ffffff;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.cyberware-section {
+  border-collapse: collapse;
+  border: 2px solid #000000;
+}
+
+.cyberware-section:first-child {
+  border-bottom: none;
+}
+
+.cyberware-section h4 {
+  background-color: black;
+  color: white; 
+  margin: 0; 
+  font-size: 16px;
+  padding-bottom: 1px;
+}
+
+.cyberware-section p {
+  padding: 0;
+  margin: 0;
+}
+
+.mod-option {
+  background: #ffffff;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.mod-option:hover {
+  background: #d2d2d2;
+}

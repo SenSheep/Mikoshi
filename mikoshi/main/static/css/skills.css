@@ -1,0 +1,28 @@
+.skill_name {
+  background-color: rgb(203, 9, 9);
+  color: white;
+}
+
+#skill_table input {
+  width: 70%;
+  height: 100%;
+  text-align: center;
+  border: none;
+}
+
+#stat_table input,
+#hp_emp_armor input,
+#weapon input {
+  width: 50%;
+  text-align: center;
+}
+
+.skills-scroll-area {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  height: 80%;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
