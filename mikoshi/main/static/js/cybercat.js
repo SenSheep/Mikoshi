@@ -3,7 +3,8 @@ import { cyberModCatalog } from './cyberware.js'
 
 // 
 export function showModOptions(target) {
-  const modList = cyberModCatalog[target] || [];
+  const normalizedTarget = normalizeTarget(target);
+  const modList = cyberModCatalog[normalizedTarget] || [];
   const container = document.getElementById('modOptionsContainer');
   const hum = document.querySelector('.max_hum')
   container.innerHTML = "";
@@ -64,4 +65,8 @@ export function initCyberwareToggles() {
       saveSkills(); // сохраняем новое значение
     });
   });
+}
+
+export function normalizeTarget(target) {
+  return target.replace(/_left|_right/, '');
 }

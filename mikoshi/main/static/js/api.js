@@ -124,6 +124,8 @@ export async function loadSkills() {
 
     // КИБЕРВЕАР
     for (const [type, info] of Object.entries(cyberware)) {
+      const normalizeType = t => t.replace(/_left|_right/, '');
+      const shortType = normalizeType(type);
       const block = document.querySelector(`.cyberware-block[data-type="${type}"]`);
       if (!block) continue;
 
@@ -133,15 +135,15 @@ export async function loadSkills() {
         if (checkbox.checked) minusHum++;
       }
 
-      const modList = block.querySelector(`.mod-list[data-for="${type.replace('cyber', '')}"]`);
+      const modList = block.querySelector(`.mod-list[data-for="${type}"]`);
       if (!modList) continue;
       modList.innerHTML = "";
 
       for (const modRef of info.mods || []) {
-        const modcyberware = (cyberModCatalog[type.replace('cyber', '')] || []).find(m => m.id === modRef.id);
+        const modcyberware = (cyberModCatalog[shortType] || []).find(m => m.id === modRef.id);
         if (modcyberware) {
           minusHum++;
-          addModification(type.replace('cyber', ''), modcyberware.name, modcyberware.desc);
+          addModification((type), modcyberware.name, modcyberware.desc);
         }
       }
     }

@@ -92,7 +92,8 @@ export function collectCyberware() {
 
   document.querySelectorAll('.cyberware-block').forEach(block => {
     const type = block.getAttribute('data-type');
-    const shortType = type.replace('cyber', '');
+    const normalizeType = t => t.replace(/_left|_right/, '');
+    const shortType = normalizeType(type);
     const checkbox = block.querySelector('.cybertoggle');
 
     const mods = [];
