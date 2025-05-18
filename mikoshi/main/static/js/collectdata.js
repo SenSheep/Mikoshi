@@ -90,7 +90,7 @@ export function collectCyberware() {
   document.querySelectorAll('.cyberware-block').forEach(block => {
     const type = block.getAttribute('data-type');
     const shortType = type.replace('cyber', '');
-    const checkbox = block.querySelector('.main-toggle');
+    const checkbox = block.querySelector('.cybertoggle');
 
     const mods = [];
     block.querySelectorAll('.mod-list .mod').forEach(modDiv => {

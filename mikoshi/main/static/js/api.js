@@ -127,7 +127,7 @@ export async function loadSkills() {
       const block = document.querySelector(`.cyberware-block[data-type="${type}"]`);
       if (!block) continue;
 
-      const checkbox = block.querySelector('.main-toggle');
+      const checkbox = block.querySelector('.cybertoggle');
       if (checkbox) {
         checkbox.checked = info.status;
         if (checkbox.checked) minusHum++;
@@ -145,6 +145,8 @@ export async function loadSkills() {
         }
       }
     }
+    const minusHumField = document.querySelector('.minus_hum')
+    minusHumField.value = minusHum;
 
   } catch (err) {
     console.error("Ошибка запроса:", err);

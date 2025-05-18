@@ -1,10 +1,11 @@
 import { saveSkills } from './api.js';
-import { update } from './stats.js';
 import { cyberModCatalog } from './cyberware.js'
 
+// 
 export function showModOptions(target) {
   const modList = cyberModCatalog[target] || [];
   const container = document.getElementById('modOptionsContainer');
+  const hum = document.querySelector('.max_hum')
   container.innerHTML = "";
 
   modList.forEach(mod => {
@@ -18,6 +19,7 @@ export function showModOptions(target) {
     div.addEventListener('click', () => {
       addModification(target, mod.name, mod.desc);
       document.getElementById("modalOverlayCyber").style.display = "none";
+      hum.value = Number(hum.value) - 1;
       saveSkills();
     });
     container.appendChild(div);
@@ -26,6 +28,7 @@ export function showModOptions(target) {
 
 export function addModification(targetId, modName, modDesc) {
   const modList = document.querySelector(`.mod-list[data-for="${targetId}"]`);
+  const hum = document.querySelector('.max_hum')
   if (!modList) return;
 
   const modDiv = document.createElement('div');
@@ -36,9 +39,29 @@ export function addModification(targetId, modName, modDesc) {
   `;
   modDiv.querySelector('.remove-mod').addEventListener('click', () => {
     modDiv.remove();
-    const humInput = document.querySelector('.real_hum');
-    if (humInput) humInput.value = parseInt(humInput.value) + 1;
+    hum.value = Number(hum.value) + 1;
     saveSkills();
   });
   modList.appendChild(modDiv);
+}
+
+export function initCyberwareToggles() {
+  const humInput = document.querySelector('.max_hum');
+  if (!humInput) return;
+
+  document.querySelectorAll('.cyberware-block .cybertoggle').forEach(toggle => {
+    toggle.addEventListener('change', () => {
+      const hl = 1; // постоянное значение урона по человечности
+      let currentHum = parseInt(humInput.value) || 0;
+
+      if (toggle.checked) {
+        currentHum -= hl;
+      } else {
+        currentHum += hl;
+      }
+
+      humInput.value = currentHum;
+      saveSkills(); // сохраняем новое значение
+    });
+  });
 }

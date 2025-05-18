@@ -4,7 +4,7 @@ import { addRowInv } from "./inventory.js";
 import { showRoleDesc } from "./roles.js";
 import { toggleRoleEdit, closeRoleEdit, openDamageModal, closeDamageModal } from "./modals.js";
 import { getDamage, getHeal, getHum, getDamageHum } from "./damage.js";
-import { showModOptions } from './cybercat.js';
+import { showModOptions, initCyberwareToggles } from './cybercat.js';
 
 // document.addEventListener("DOMContentLoaded", function () {
 //   // Обработчики для полей ввода
@@ -131,4 +131,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (e.target === this) this.style.display = "none";
     });
   }
+
+  initCyberwareToggles();
+  // Обработчик для переключателей киберимплантов
 });
